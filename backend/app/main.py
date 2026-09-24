@@ -10,8 +10,13 @@ from .config import Settings, get_settings
 from .crm import ArtistNotFound, CrmClient, CrmError
 from .models import Epk
 
-# Any localhost port (http or https), and berlinrecords.info plus its subdomains over https.
-ALLOWED_ORIGINS = r"https?://(localhost|127\.0\.0\.1)(:\d+)?|https://([a-z0-9-]+\.)*berlinrecords\.info"
+# Any localhost port (http or https), berlinrecords.info plus its subdomains over https, and the
+# embed's Cloudflare Worker (its demo page calls the API).
+ALLOWED_ORIGINS = (
+    r"https?://(localhost|127\.0\.0\.1)(:\d+)?"
+    r"|https://([a-z0-9-]+\.)*berlinrecords\.info"
+    r"|https://agency-epk\.purema4\.workers\.dev"
+)
 
 ArtistId = Annotated[str, Path(pattern=r"^[A-Za-z0-9_-]{1,64}$", description="Artist id in the CRM")]
 

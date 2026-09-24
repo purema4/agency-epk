@@ -115,6 +115,7 @@ def test_health(client):
         "http://127.0.0.1:8080",
         "https://berlinrecords.info",
         "https://www.berlinrecords.info",
+        "https://agency-epk.purema4.workers.dev",
     ],
 )
 def test_cors_allows_localhost_and_berlinrecords(client, origin):
@@ -135,6 +136,9 @@ def test_cors_allows_localhost_and_berlinrecords(client, origin):
         "http://berlinrecords.info",  # plain http is not allowed for the live site
         "http://localhost.evil.com",
         "null",
+        "http://agency-epk.purema4.workers.dev",
+        "https://evil-agency-epk.purema4.workers.dev",
+        "https://agency-epk.purema4.workers.dev.evil.com",
     ],
 )
 def test_cors_blocks_other_origins(client, origin):

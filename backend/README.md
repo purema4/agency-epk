@@ -2,7 +2,8 @@
 
 FastAPI service between the frontend and the Twenty CRM. It queries Twenty's GraphQL API with an API
 key (kept server-side), maps the record to the press kit shape, caches it briefly, and serves it with CORS for
-`localhost` (any port) and `https://berlinrecords.info` (plus subdomains).
+`localhost` (any port), `https://berlinrecords.info` (plus subdomains) and the embed's Worker
+`https://agency-epk.purema4.workers.dev`.
 
 ```
 GET /artists/{artist_id}/epk   -> press kit JSON (same shape as src/types.ts)
