@@ -2,7 +2,7 @@ name: CI/CD
 
 # PRs: test everything and check that both builds work.
 # Push to main: same, then publish the backend image to GHCR.
-# The embed is deployed by Cloudflare Pages' own GitHub integration (build: npm run build:embed).
+# The embed is deployed by Cloudflare Workers' GitHub integration (npm run build:embed, then wrangler deploy).
 on:
   push:
     branches: [main]
@@ -30,7 +30,7 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
-      - name: Build embed (same command Cloudflare Pages runs)
+      - name: Build embed (same command Cloudflare runs)
         run: npm run build:embed
 
   backend:

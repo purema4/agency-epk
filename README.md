@@ -25,21 +25,24 @@ npm run build:embed    # dist-embed/artist-epk.js for the CDN
 ```html
 <style>body{margin:0}</style>
 <artist-epk artist-id="ariovistus"></artist-epk>
-<script type="module" src="https://artist-epk.pages.dev/artist-epk.js"></script>
+<script type="module" src="https://agency-epk.<your-subdomain>.workers.dev/artist-epk.js"></script>
 ```
 
 ## Deploys
 
-**Embed → Cloudflare Pages** (GitHub integration, deploys every push; other branches get preview URLs).
-Pages project → Settings → Builds & deployments:
+**Embed → Cloudflare Workers** (static assets, Cloudflare's GitHub integration: every push to
+`main` deploys; other branches get preview URLs). Worker → Settings → Build:
 
 | Setting | Value |
 |---|---|
-| Framework preset | None |
 | Build command | `npm run build:embed` |
-| Build output directory | `dist-embed` |
+| Deploy command | `npx wrangler deploy` |
 | Root directory | *(empty)* |
-| Env var `VITE_API_URL` | Public URL of the backend (optional; unset = sample data) |
+| Build variable `VITE_API_URL` | Public URL of the backend (optional; unset = sample data) |
+
+`wrangler.jsonc` tells `wrangler deploy` to upload `dist-embed/`; its `name` must match the Worker's
+name in the dashboard. `embed-public/_headers` sets CORS and caching. Manual deploy:
+`npm run deploy:embed` (after `npx wrangler login`).
 
 Node version comes from `.nvmrc`.
 

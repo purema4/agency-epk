@@ -1,4 +1,4 @@
-# Cloudflare Pages response headers for the embed CDN.
+# Cloudflare static-asset response headers for the embed CDN (Workers static assets).
 # The script is loaded as a module from GoDaddy's iframe, which requires CORS.
 /*
   Access-Control-Allow-Origin: *

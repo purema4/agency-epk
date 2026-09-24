@@ -1,0 +1,13 @@
+// Cloudflare Worker that serves the <artist-epk> embed as static files (no Worker script).
+// Cloudflare's Git build runs:  build = npm run build:embed,  deploy = npx wrangler deploy
+// dist-embed/_headers (from embed-public/) sets CORS and caching on these files.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Must match the Worker's name in the Cloudflare dashboard.
+  "name": "agency-epk",
+  "compatibility_date": "2026-09-24",
+  "assets": {
+    "directory": "./dist-embed",
+    "not_found_handling": "none"
+  }
+}
