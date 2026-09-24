@@ -1,7 +1,8 @@
 name: CI/CD
 
 # PRs: test everything and check that both builds work.
-# Push to main: same, then deploy the embed to Cloudflare Pages and publish the backend image to GHCR.
+# Push to main: same, then publish the backend image to GHCR.
+# The embed is deployed by Cloudflare Pages' own GitHub integration (build: npm run build:embed).
 on:
   push:
     branches: [main]
@@ -23,23 +24,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: .nvmrc
           cache: npm
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
-      - name: Build embed
+      - name: Build embed (same command Cloudflare Pages runs)
         run: npm run build:embed
-        env:
-          # Repo variable (Settings > Secrets and variables > Actions > Variables).
-          # Empty = the embed uses its built-in sample data.
-          VITE_API_URL: ${{ vars.EMBED_API_URL }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dist-embed
-          path: dist-embed
-          retention-days: 7
 
   backend:
     name: Backend · pytest
@@ -56,27 +48,6 @@ jobs:
           cache-dependency-path: backend/requirements*.txt
       - run: pip install -r requirements-dev.txt
       - run: python -m pytest -q
-
-  deploy-embed:
-    name: Deploy embed → Cloudflare Pages
-    needs: [frontend, backend]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment:
-      name: embed-production
-      url: ${{ steps.deploy.outputs.deployment-url }}
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: dist-embed
-          path: dist-embed
-      - name: Deploy
-        id: deploy
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist-embed --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT || 'artist-epk' }} --branch=main --commit-hash=${{ github.sha }}
 
   backend-image:
     name: Backend image → ghcr.io

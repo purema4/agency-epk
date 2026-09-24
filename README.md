@@ -28,17 +28,21 @@ npm run build:embed    # dist-embed/artist-epk.js for the CDN
 <script type="module" src="https://artist-epk.pages.dev/artist-epk.js"></script>
 ```
 
-## CI/CD (.github/workflows/pipeline.yml)
+## Deploys
 
-Every PR and push: typecheck, tests, both frontend builds, backend tests, Docker build.
-On `main` it also deploys `dist-embed/` to **Cloudflare Pages** and pushes the backend image to
-**ghcr.io/<owner>/<repo>-api** (`latest` + short SHA tags).
+**Embed → Cloudflare Pages** (GitHub integration, deploys every push; other branches get preview URLs).
+Pages project → Settings → Builds & deployments:
 
-Repository settings needed (Settings → Secrets and variables → Actions):
+| Setting | Value |
+|---|---|
+| Framework preset | None |
+| Build command | `npm run build:embed` |
+| Build output directory | `dist-embed` |
+| Root directory | *(empty)* |
+| Env var `VITE_API_URL` | Public URL of the backend (optional; unset = sample data) |
 
-| Kind | Name | Value |
-|---|---|---|
-| Secret | `CLOUDFLARE_API_TOKEN` | Cloudflare API token with *Cloudflare Pages: Edit* |
-| Secret | `CLOUDFLARE_ACCOUNT_ID` | Your Cloudflare account ID |
-| Variable | `EMBED_API_URL` | Public URL of the backend (optional; empty = sample data) |
-| Variable | `CLOUDFLARE_PAGES_PROJECT` | Pages project name (optional; default `artist-epk`) |
+Node version comes from `.nvmrc`.
+
+**Backend image → ghcr.io/<owner>/<repo>-api** via GitHub Actions (`.github/workflows/pipeline.yml`),
+which also runs typecheck, tests, both frontend builds and the backend tests on every PR and push.
+Pushes to `main` publish `latest` and short-SHA tags; PRs only build.
