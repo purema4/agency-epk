@@ -1,0 +1,14 @@
+/* Extra rules for the <artist-epk> web component only (loaded after global.css). */
+
+/* Don't inherit fonts, colours, line-height etc. from the host page. */
+:host{all:initial;display:block;box-sizing:border-box;color-scheme:dark;-webkit-text-size-adjust:100%}
+:host([hidden]){display:none}
+
+/* GoDaddy runs custom code in an iframe that may size itself to its content, where
+   vh follows the iframe rather than the screen. Size the hero from the width instead. */
+@media (min-width:641px){.hero{min-height:clamp(520px,62vw,880px)}}
+.screen{min-height:480px}
+
+/* A fixed toast would sit at the bottom of a tall iframe, out of view.
+   Anchor it to the bottom of the EPK, next to the Copy email button. */
+.toast{position:absolute}

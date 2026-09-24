@@ -1,0 +1,140 @@
+import httpx
+import pytest
+
+from .conftest import ARIOVISTUS, TOKEN
+
+URL = "/artists/ariovistus/epk"
+
+
+def test_returns_the_press_kit_from_the_crm(client, crm):
+    res = client.get(URL)
+    assert res.status_code == 200
+    assert res.json() == ARIOVISTUS  # same camelCase shape the frontend expects
+    assert res.headers["cache-control"] == "public, max-age=60"
+
+
+def test_calls_the_crm_with_the_bearer_token(client, crm):
+    client.get(URL)
+    [req] = crm.requests
+    assert req.headers["authorization"] == f"Bearer {TOKEN}"
+    assert req.url == "https://crm.test/v1/artists/ariovistus/epk"
+
+
+def test_never_exposes_the_token(client):
+    res = client.get(URL)
+    assert TOKEN not in res.text
+    assert all(TOKEN not in v for v in res.headers.values())
+
+
+def test_caches_crm_answers(client, crm):
+    assert client.get(URL).status_code == 200
+    assert client.get("/artists/ARIOVISTUS/epk").status_code == 200  # ids are case-insensitive
+    assert len(crm.requests) == 1
+
+
+def test_unknown_artist_is_404(client):
+    res = client.get("/artists/nobody/epk")
+    assert res.status_code == 404
+    assert res.json() == {"detail": "Artist not found"}
+
+
+def test_errors_are_not_cached(client, crm):
+    crm.handler = lambda req: httpx.Response(503)
+    assert client.get(URL).status_code == 502
+    crm.handler = crm.default
+    assert client.get(URL).status_code == 200
+
+
+@pytest.mark.parametrize(
+    ("crm_answer", "status", "detail"),
+    [
+        (lambda req: httpx.Response(401), 502, "The CRM rejected our credentials"),
+        (lambda req: httpx.Response(500), 502, "The CRM returned an error (500)"),
+        (lambda req: httpx.Response(200, json={"name": "missing everything else"}), 502, "unexpected format"),
+        (lambda req: httpx.Response(200, text="<html>not json</html>"), 502, "unexpected format"),
+    ],
+)
+def test_crm_failures_become_gateway_errors(client, crm, crm_answer, status, detail):
+    crm.handler = crm_answer
+    res = client.get(URL)
+    assert res.status_code == status
+    assert detail in res.json()["detail"]
+
+
+def test_crm_timeout_is_504(client, crm):
+    def slow(req):
+        raise httpx.ReadTimeout("slow", request=req)
+
+    crm.handler = slow
+    assert client.get(URL).status_code == 504
+
+
+def test_crm_down_is_502(client, crm):
+    def down(req):
+        raise httpx.ConnectError("refused", request=req)
+
+    crm.handler = down
+    res = client.get(URL)
+    assert res.status_code == 502
+    assert res.json()["detail"] == "Could not reach the CRM"
+
+
+@pytest.mark.parametrize("bad_id", ["a" * 65, "a.b", "a%2Fb", "%2E%2E"])
+def test_rejects_odd_artist_ids_without_calling_the_crm(client, crm, bad_id):
+    assert client.get(f"/artists/{bad_id}/epk").status_code in (404, 422)
+    assert crm.requests == []
+
+
+def test_health(client):
+    assert client.get("/health").json() == {"status": "ok"}
+
+
+@pytest.mark.parametrize(
+    "origin",
+    [
+        "http://localhost:5173",
+        "http://localhost",
+        "https://localhost:4173",
+        "http://127.0.0.1:8080",
+        "https://berlinrecords.info",
+        "https://www.berlinrecords.info",
+    ],
+)
+def test_cors_allows_localhost_and_berlinrecords(client, origin):
+    res = client.get(URL, headers={"Origin": origin})
+    assert res.headers["access-control-allow-origin"] == origin
+
+    pre = client.options(URL, headers={"Origin": origin, "Access-Control-Request-Method": "GET"})
+    assert pre.status_code == 200
+    assert pre.headers["access-control-allow-origin"] == origin
+
+
+@pytest.mark.parametrize(
+    "origin",
+    [
+        "https://evil.com",
+        "https://berlinrecords.info.evil.com",
+        "https://notberlinrecords.info",
+        "http://berlinrecords.info",  # plain http is not allowed for the live site
+        "http://localhost.evil.com",
+        "null",
+    ],
+)
+def test_cors_blocks_other_origins(client, origin):
+    res = client.get(URL, headers={"Origin": origin})
+    assert "access-control-allow-origin" not in res.headers
+
+
+def test_cors_only_allows_get(client):
+    pre = client.options(
+        URL, headers={"Origin": "http://localhost:5173", "Access-Control-Request-Method": "DELETE"}
+    )
+    assert pre.status_code == 400
+
+
+def test_omits_empty_optional_fields_instead_of_sending_null(client, crm):
+    record = {**ARIOVISTUS, "bio": {"short": "Hi"}, "booking": {**ARIOVISTUS["booking"], "contact": None}}
+    crm.handler = lambda req: httpx.Response(200, json=record)
+    body = client.get(URL).json()
+    assert "extra" not in body["bio"]
+    assert "contact" not in body["booking"]

@@ -1,0 +1,14 @@
+# Cloudflare Pages response headers for the embed CDN.
+# The script is loaded as a module from GoDaddy's iframe, which requires CORS.
+/*
+  Access-Control-Allow-Origin: *
+  X-Content-Type-Options: nosniff
+
+# Content-hashed chunks never change: cache them for a year.
+/mockApi-*
+  Cache-Control: public, max-age=31536000, immutable
+
+# artist-epk.js keeps a fixed URL (it's what GoDaddy links to), so browsers
+# revalidate it and pick up each deploy right away.
+/artist-epk.js
+  Cache-Control: public, max-age=0, must-revalidate

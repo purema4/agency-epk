@@ -1,0 +1,14 @@
+# Keep secrets, local envs and dev files out of the build context.
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+tests/
+pytest.ini
+requirements-dev.txt
+Dockerfile
+docker-compose.yml
+README.md

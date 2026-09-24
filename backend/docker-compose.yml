@@ -1,0 +1,20 @@
+# Local stack: API + stand-in CRM.  docker compose up --build  ->  http://localhost:8000
+# For the real CRM, run only the api image with your settings (see README).
+services:
+  api:
+    build: .
+    ports: ["8000:8000"]
+    environment:
+      CRM_BASE_URL: http://mock-crm:8001
+      CRM_API_TOKEN: dev-token
+    depends_on:
+      mock-crm:
+        condition: service_started
+
+  mock-crm:
+    build:
+      context: .
+      target: mock-crm
+    ports: ["8001:8001"] # the sample photo URL points at localhost:8001
+    environment:
+      CRM_API_TOKEN: dev-token

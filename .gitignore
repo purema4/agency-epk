@@ -1,0 +1,10 @@
+node_modules
+dist
+dist-embed
+coverage
+*.log
+
+# Local env files (may hold secrets). Templates are committed as .env.example.
+.env
+.env.*
+!.env.example
