@@ -9,7 +9,8 @@ class Settings(BaseSettings):
 
     crm_base_url: str
     crm_api_token: SecretStr
-    crm_artist_path: str = "/artists/{artist_id}/epk"
+    # Twenty's GraphQL endpoint, relative to crm_base_url.
+    crm_graphql_path: str = "/graphql"
     crm_timeout_seconds: float = 5.0
     cache_ttl_seconds: float = 60.0
 

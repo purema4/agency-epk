@@ -1,0 +1,123 @@
+{
+  "name": "ARIOVISTUS",
+  "label": "BERLIN RECORDS",
+  "kicker": "TALENT - EPK - 2026",
+  "photo": {
+    "primaryLinkUrl": "http://localhost:8001/static/hero.jpg"
+  },
+  "photoAlt": "ARIOVISTUS behind the decks, lit by a cyan neon ring",
+  "tags": [
+    "PEAK TECHNO",
+    "DRIVEN",
+    "MELODIC"
+  ],
+  "platforms": {
+    "primaryLinkUrl": "#",
+    "primaryLinkLabel": "Spotify",
+    "secondaryLinks": [
+      {
+        "url": "#",
+        "label": "Beatport"
+      },
+      {
+        "url": "#",
+        "label": "SoundCloud"
+      },
+      {
+        "url": "#",
+        "label": "YouTube"
+      },
+      {
+        "url": "#",
+        "label": "Instagram"
+      }
+    ]
+  },
+  "lede": "ARIOVISTUS co-founded Berlin Records and built OUTKZT into a global, nomadic techno movement rooted in freedom over comfort.",
+  "bioShort": "Born in Montreal in the early 1990s, ARIOVISTUS came of age as music shifted from analog to digital and techno and trance broke into the mainstream. Raised on a soundscape spanning Linkin Park, Daft Punk, Martin Garrix, and Illenium, he didn't pick up production and DJing until his late twenties, but once techno found him, it stuck.",
+  "bioExtra": "Add a longer bio here: labels, key gigs, residencies, and what a set feels like on the floor.",
+  "bookingContact": "",
+  "bookingEmail": {
+    "primaryEmail": "bookings@berlinrecords.world"
+  },
+  "agencyLink": {
+    "primaryLinkUrl": "https://berlinrecords.info/agency",
+    "primaryLinkLabel": "BERLINRECORDS.INFO/AGENCY"
+  },
+  "artist": {
+    "name": "Ariovistus",
+    "stageName": "ARIOVISTUS",
+    "socialLinks": {
+      "primaryLinkUrl": "",
+      "primaryLinkLabel": "",
+      "secondaryLinks": []
+    }
+  },
+  "stats": {
+    "edges": [
+      {
+        "node": {
+          "name": "Spotify monthly listeners (P)",
+          "value": "8K",
+          "position": 0
+        }
+      },
+      {
+        "node": {
+          "name": "Instagram followers",
+          "value": "9,7K",
+          "position": 1
+        }
+      },
+      {
+        "node": {
+          "name": "Performances a year",
+          "value": "30+",
+          "position": 2
+        }
+      },
+      {
+        "node": {
+          "name": "xxxxxx xxxxx",
+          "value": "XX",
+          "position": 3
+        }
+      },
+      {
+        "node": {
+          "name": "Total Stream",
+          "value": "XXXk",
+          "position": 4
+        }
+      }
+    ]
+  },
+  "charts": {
+    "edges": [
+      {
+        "node": {
+          "name": "Red light",
+          "recordLabel": "Replicate",
+          "chartPosition": "xTH",
+          "position": 0
+        }
+      },
+      {
+        "node": {
+          "name": "I LOVE YOU",
+          "recordLabel": "Animarum",
+          "chartPosition": "xTH",
+          "position": 1
+        }
+      },
+      {
+        "node": {
+          "name": "WHERE ARE YOU",
+          "recordLabel": "Berlin records",
+          "chartPosition": "xTH",
+          "position": 2
+        }
+      }
+    ]
+  }
+}

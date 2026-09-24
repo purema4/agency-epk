@@ -1,7 +1,9 @@
+import json
+
 import httpx
 import pytest
 
-from .conftest import ARIOVISTUS, TOKEN
+from .conftest import ARIOVISTUS, ARIOVISTUS_CRM, TOKEN, graphql_answer
 
 URL = "/artists/ariovistus/epk"
 
@@ -13,11 +15,15 @@ def test_returns_the_press_kit_from_the_crm(client, crm):
     assert res.headers["cache-control"] == "public, max-age=60"
 
 
-def test_calls_the_crm_with_the_bearer_token(client, crm):
+def test_queries_twenty_graphql_with_the_bearer_token(client, crm):
     client.get(URL)
     [req] = crm.requests
     assert req.headers["authorization"] == f"Bearer {TOKEN}"
-    assert req.url == "https://crm.test/v1/artists/ariovistus/epk"
+    assert req.method == "POST"
+    assert req.url == "https://crm.test/v1/graphql"
+    body = json.loads(req.content)
+    assert body["variables"] == {"slug": "ariovistus"}
+    assert "isPublished: { eq: true }" in body["query"]  # drafts are never served
 
 
 def test_never_exposes_the_token(client):
@@ -50,8 +56,19 @@ def test_errors_are_not_cached(client, crm):
     [
         (lambda req: httpx.Response(401), 502, "The CRM rejected our credentials"),
         (lambda req: httpx.Response(500), 502, "The CRM returned an error (500)"),
-        (lambda req: httpx.Response(200, json={"name": "missing everything else"}), 502, "unexpected format"),
+        (lambda req: httpx.Response(200, json={"data": None}), 502, "unexpected format"),
         (lambda req: httpx.Response(200, text="<html>not json</html>"), 502, "unexpected format"),
+        (
+            lambda req: httpx.Response(200, json={"errors": [{"message": "no", "extensions": {"code": "UNAUTHENTICATED"}}]}),
+            502,
+            "The CRM rejected our credentials",
+        ),
+        (
+            lambda req: httpx.Response(200, json={"errors": [{"message": "Cannot query field \"slug\""}]}),
+            502,
+            "The CRM rejected the press kit query",
+        ),
+        (lambda req: graphql_answer({"name": "Only a name"}), 502, "missing required fields"),
     ],
 )
 def test_crm_failures_become_gateway_errors(client, crm, crm_answer, status, detail):
@@ -133,8 +150,8 @@ def test_cors_only_allows_get(client):
 
 
 def test_omits_empty_optional_fields_instead_of_sending_null(client, crm):
-    record = {**ARIOVISTUS, "bio": {"short": "Hi"}, "booking": {**ARIOVISTUS["booking"], "contact": None}}
-    crm.handler = lambda req: httpx.Response(200, json=record)
+    record = {**ARIOVISTUS_CRM, "bioExtra": "", "bookingContact": None}  # Twenty stores empty text as ""
+    crm.handler = lambda req: graphql_answer(record)
     body = client.get(URL).json()
     assert "extra" not in body["bio"]
     assert "contact" not in body["booking"]
