@@ -29,6 +29,18 @@ def test_stats_and_charts_follow_their_crm_order_not_creation_order():
     ]
 
 
+def test_charts_carry_their_spotify_link_when_set():
+    charts = [
+        {"name": "A", "spotifyLink": {"primaryLinkUrl": "https://open.spotify.com/track/1"}, "position": 0},
+        {"name": "B", "spotifyLink": {"primaryLinkUrl": ""}, "position": 1},
+        {"name": "C", "spotifyLink": None, "position": 2},
+    ]
+    body = epk(charts={"edges": [{"node": n} for n in charts]})
+    assert body["charts"][0]["url"] == "https://open.spotify.com/track/1"
+    assert "url" not in body["charts"][1]
+    assert "url" not in body["charts"][2]
+
+
 def test_half_filled_rows_are_skipped():
     body = epk(
         stats={"edges": [{"node": {"name": "No value", "value": ""}}, {"node": {"name": "", "value": "5"}}]},

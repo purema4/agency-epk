@@ -32,7 +32,7 @@ query PressKit($slug: String!) {
         agencyLink { primaryLinkUrl primaryLinkLabel }
         artist { name stageName socialLinks { primaryLinkUrl primaryLinkLabel secondaryLinks } }
         stats { edges { node { name value position } } }
-        charts { edges { node { name recordLabel chartPosition position } } }
+        charts { edges { node { name recordLabel chartPosition spotifyLink { primaryLinkUrl } position } } }
       }
     }
   }
@@ -140,7 +140,12 @@ def map_crm_record(kit: dict[str, Any]) -> Epk:
             ],
             "bio": {"short": _text(kit.get("bioShort")), "extra": _text(kit.get("bioExtra"))},
             "charts": [
-                {"title": title, "label": _text(c.get("recordLabel")) or "", "position": _text(c.get("chartPosition")) or ""}
+                {
+                    "title": title,
+                    "label": _text(c.get("recordLabel")) or "",
+                    "position": _text(c.get("chartPosition")) or "",
+                    "url": _text((c.get("spotifyLink") or {}).get("primaryLinkUrl")),
+                }
                 for c in _nodes(kit.get("charts"))
                 if (title := _text(c.get("name")))
             ],

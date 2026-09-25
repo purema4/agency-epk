@@ -83,6 +83,7 @@ describe("isEpk", () => {
   it("accepts a complete press kit, with or without the extra bio", () => {
     expect(isEpk(ariovistus)).toBe(true);
     expect(isEpk({ ...ariovistus, bio: { short: "Hi" } })).toBe(true);
+    expect(isEpk({ ...ariovistus, charts: [{ ...ariovistus.charts[0], url: "https://open.spotify.com/track/1" }] })).toBe(true);
   });
 
   it.each([
@@ -91,6 +92,7 @@ describe("isEpk", () => {
     ["non-string tag", { ...ariovistus, tags: ["ok", 3] }],
     ["bad stat", { ...ariovistus, stats: [{ value: 8 }] }],
     ["bad chart", { ...ariovistus, charts: [{ title: "x" }] }],
+    ["non-string chart url", { ...ariovistus, charts: [{ ...ariovistus.charts[0], url: 1 }] }],
     ["non-string contact", { ...ariovistus, booking: { ...ariovistus.booking, contact: 1 } }],
     ["missing booking email", { ...ariovistus, booking: { ...ariovistus.booking, email: undefined } }],
   ])("rejects %s", (_, value) => {

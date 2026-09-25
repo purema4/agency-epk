@@ -110,6 +110,10 @@ h2{color:var(--orange-hi);font-weight:500;font-size:clamp(1.3rem,2.2vw,1.7rem);m
 .chart li::before{content:"";position:absolute;inset:0;background:var(--orange);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.2,.8,.1,1);z-index:0}
 .chart li:hover::before,.chart li:focus-within::before{transform:none}
 .chart li>*{position:relative;z-index:1}
+/* Linked rows: an empty link stretched over the whole row, above the text. */
+.chart li.linked{cursor:pointer}
+.chart li>.row-link{position:absolute;inset:0;z-index:2}
+.chart .row-link:focus-visible{outline:2px solid #fff;outline-offset:-2px}
 .chart .t{font-weight:700;text-transform:none;display:flex;align-items:center;min-width:0}
 .chart .pos{font-weight:400;min-width:3.2em;text-align:right;transition:transform .3s}
 .chart li:hover .pos{transform:scale(1.15);font-weight:700}

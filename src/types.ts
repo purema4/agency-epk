@@ -22,6 +22,8 @@ export interface ChartEntry {
   title: string;
   label: string;
   position: string;
+  /** Spotify track; the row links to it when set. */
+  url?: string;
 }
 
 export interface BookingInfo {

@@ -32,6 +32,7 @@ class ChartEntry(CamelModel):
     title: str
     label: str
     position: str
+    url: str | None = None  # Spotify track
 
 
 class BookingInfo(CamelModel):
