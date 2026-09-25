@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Host page · artist-roster dev demo</title>
+    <!-- Deliberately clashing host-page styles: none of this should reach the roster. -->
+    <style>
+      body { margin: 0; font: 20px/2 Georgia, serif; color: navy; background: #f3efe6; text-transform: uppercase; }
+      h1, h2, p, a, button, li { color: green !important; font-family: "Comic Sans MS", cursive; }
+      .host { padding: 2rem; }
+    </style>
+  </head>
+  <body>
+    <div class="host"><h1>Agency page header</h1><p>Content above the roster.</p></div>
+    <artist-roster href-template="/embed.html?artist={id}"></artist-roster>
+    <div class="host"><p>Content below the roster.</p></div>
+    <script type="module" src="/src/embed/index.tsx"></script>
+  </body>
+</html>

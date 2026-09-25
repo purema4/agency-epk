@@ -31,8 +31,10 @@ class FakeCrm:
             return httpx.Response(401)
         if request.method != "POST" or request.url.path != "/v1/graphql":
             return httpx.Response(404)
-        slug = json.loads(request.content)["variables"]["slug"]
-        return graphql_answer(ARIOVISTUS_CRM) if slug == "ariovistus" else graphql_answer()
+        variables = json.loads(request.content)["variables"]
+        if "slug" not in variables:  # the roster query
+            return graphql_answer({**ARIOVISTUS_CRM, "slug": "ariovistus"})
+        return graphql_answer(ARIOVISTUS_CRM) if variables["slug"] == "ariovistus" else graphql_answer()
 
     def transport(self) -> httpx.MockTransport:
         def handle(request: httpx.Request) -> httpx.Response:

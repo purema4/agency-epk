@@ -47,3 +47,14 @@ export interface Epk {
   charts: ChartEntry[];
   booking: BookingInfo;
 }
+
+/** One tile of the <artist-roster> mosaic. `id` is the artist-id of that artist's <artist-epk>. */
+export interface RosterArtist {
+  id: string;
+  name: string;
+  photo: Photo;
+}
+
+export interface Roster {
+  artists: RosterArtist[];
+}

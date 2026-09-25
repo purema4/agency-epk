@@ -6,6 +6,7 @@ key (kept server-side), maps the record to the press kit shape, caches it briefl
 `https://agency-epk.purema4.workers.dev`.
 
 ```
+GET /artists                   -> {"artists": [{id, name, photo}]} for <artist-roster>
 GET /artists/{artist_id}/epk   -> press kit JSON (same shape as src/types.ts)
 GET /health
 ```
@@ -63,6 +64,9 @@ One GraphQL request per artist (`PRESS_KIT_QUERY` in `app/crm.py`) fetches the *
 | `bio.short` / `bio.extra` | Bio (Short) / Bio (Extra) |
 | `charts` | Charts records: Track Title, Record Label, Chart Position |
 | `booking` | Booking Contact, Booking Email (primary), Agency Link (URL + label; label defaults to the bare URL) |
+
+`GET /artists` lists every published press kit in the order they're arranged in Twenty, as
+`{id: slug, name, photo}`. Kits without a slug, name or hero photo are left out (and logged).
 
 Slugs are matched exactly, so keep them lowercase (the API lowercases the requested id). An
 unpublished or missing kit is a 404; a published kit missing Hero Photo, Bio (Short), Booking Email

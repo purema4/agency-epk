@@ -42,6 +42,16 @@ class BookingInfo(CamelModel):
     agency_label: str
 
 
+class RosterArtist(CamelModel):
+    id: str  # the press kit slug, i.e. the artist-id of <artist-epk>
+    name: str
+    photo: Photo
+
+
+class Roster(CamelModel):
+    artists: list[RosterArtist]
+
+
 class Epk(CamelModel):
     name: str
     label: str

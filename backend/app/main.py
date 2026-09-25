@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .cache import TtlCache
 from .config import Settings, get_settings
 from .crm import ArtistNotFound, CrmClient, CrmError
-from .models import Epk
+from .models import Epk, Roster
 
 # Any localhost port (http or https), berlinrecords.info plus its subdomains over https, and the
 # embed's Cloudflare Worker (its demo page calls the API).
@@ -29,6 +29,7 @@ def create_app(settings: Settings | None = None, crm_transport: httpx.AsyncBaseT
     async def lifespan(app: FastAPI):
         app.state.crm = CrmClient(settings, transport=crm_transport)
         app.state.cache = TtlCache[Epk](settings.cache_ttl_seconds)
+        app.state.roster_cache = TtlCache[Roster](settings.cache_ttl_seconds)
         yield
         await app.state.crm.aclose()
 
@@ -44,6 +45,17 @@ def create_app(settings: Settings | None = None, crm_transport: httpx.AsyncBaseT
     @app.get("/health")
     async def health() -> dict[str, str]:
         return {"status": "ok"}
+
+    # Every published press kit as {id, name, photo}, for the <artist-roster> mosaic.
+    @app.get("/artists", response_model=Roster, response_model_by_alias=True)
+    async def get_roster(request: Request, response: Response) -> Roster:
+        crm: CrmClient = request.app.state.crm
+        try:
+            roster = await request.app.state.roster_cache.get_or_load("all", crm.get_roster)
+        except CrmError as exc:
+            raise HTTPException(exc.status, exc.message)
+        response.headers["Cache-Control"] = f"public, max-age={int(settings.cache_ttl_seconds)}"
+        return roster
 
     # exclude_none: optional fields are omitted, never null (the frontend expects string or absent).
     @app.get("/artists/{artist_id}/epk", response_model=Epk, response_model_by_alias=True, response_model_exclude_none=True)

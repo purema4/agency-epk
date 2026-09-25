@@ -6,7 +6,7 @@ import httpx
 from pydantic import ValidationError
 
 from .config import Settings
-from .models import Epk
+from .models import Epk, Roster, RosterArtist
 
 log = logging.getLogger(__name__)
 
@@ -33,6 +33,24 @@ query PressKit($slug: String!) {
         artist { name stageName socialLinks { primaryLinkUrl primaryLinkLabel secondaryLinks } }
         stats { edges { node { name value position } } }
         charts { edges { node { name recordLabel chartPosition spotifyLink { primaryLinkUrl } position } } }
+      }
+    }
+  }
+}
+"""
+
+# Every published press kit, for the <artist-roster> mosaic. Ordered by position afterwards.
+ROSTER_QUERY = """
+query Roster {
+  pressKits(filter: { isPublished: { eq: true } }, first: 100) {
+    edges {
+      node {
+        slug
+        name
+        photo { primaryLinkUrl }
+        photoAlt
+        position
+        artist { name stageName }
       }
     }
   }
@@ -159,6 +177,22 @@ def map_crm_record(kit: dict[str, Any]) -> Epk:
     )
 
 
+def map_roster(kits: list[dict[str, Any]]) -> Roster:
+    """Published press kits -> roster cards. Kits without a slug or photo can't make a tile and
+    are left out (and logged) rather than failing the whole roster."""
+    cards = []
+    for kit in sorted(kits, key=lambda n: n.get("position") if n.get("position") is not None else float("inf")):
+        artist = kit.get("artist") or {}
+        slug = _text(kit.get("slug"))
+        name = _text(kit.get("name")) or _text(artist.get("stageName")) or _text(artist.get("name"))
+        photo = _text((kit.get("photo") or {}).get("primaryLinkUrl"))
+        if not (slug and name and photo):
+            log.warning("Press kit %r left out of the roster: needs a slug, name and hero photo", slug or name)
+            continue
+        cards.append(RosterArtist(id=slug.lower(), name=name, photo={"src": photo, "alt": _text(kit.get("photoAlt")) or name}))
+    return Roster(artists=cards)
+
+
 class CrmClient:
     def __init__(self, settings: Settings, transport: httpx.AsyncBaseTransport | None = None) -> None:
         self._path = settings.crm_graphql_path
@@ -173,11 +207,12 @@ class CrmClient:
             transport=transport,
         )
 
-    async def get_epk(self, artist_id: str) -> Epk:
+    async def _query(self, query: str, variables: dict[str, Any], what: str) -> dict[str, Any]:
+        """Runs a GraphQL query and returns its `data`; every failure becomes a CrmError."""
         try:
-            res = await self._http.post(self._path, json={"query": PRESS_KIT_QUERY, "variables": {"slug": artist_id}})
+            res = await self._http.post(self._path, json={"query": query, "variables": variables})
         except httpx.TimeoutException:
-            log.warning("CRM timed out for %s", artist_id)
+            log.warning("CRM timed out for %s", what)
             raise CrmError(504, "The CRM took too long to answer")
         except httpx.HTTPError as exc:
             log.warning("CRM unreachable: %s", exc)
@@ -187,37 +222,50 @@ class CrmClient:
             log.error("CRM rejected the API token (HTTP %s)", res.status_code)
             raise CrmError(502, "The CRM rejected our credentials")
         if res.is_error:
-            log.warning("CRM error %s for %s", res.status_code, artist_id)
+            log.warning("CRM error %s for %s", res.status_code, what)
             raise CrmError(502, f"The CRM returned an error ({res.status_code})")
 
         try:
             body = res.json()
         except ValueError:
-            log.error("CRM answered %s with non-JSON", artist_id)
+            log.error("CRM answered %s with non-JSON", what)
             raise CrmError(502, "The CRM returned data in an unexpected format")
 
         # GraphQL reports failures (bad token, unknown field) in `errors`, often with HTTP 200.
         if errors := body.get("errors"):
             codes = {(e.get("extensions") or {}).get("code") for e in errors}
-            log.error("CRM GraphQL errors for %s: %s", artist_id, [e.get("message") for e in errors])
+            log.error("CRM GraphQL errors for %s: %s", what, [e.get("message") for e in errors])
             if codes & {"UNAUTHENTICATED", "FORBIDDEN"}:
                 raise CrmError(502, "The CRM rejected our credentials")
             raise CrmError(502, "The CRM rejected the press kit query")
 
-        try:
-            edges = body["data"]["pressKits"]["edges"]
-        except (KeyError, TypeError):
-            log.error("Unexpected CRM payload for %s: %.200s", artist_id, body)
+        data = body.get("data")
+        if not isinstance(data, dict):
+            log.error("Unexpected CRM payload for %s: %.200s", what, body)
             raise CrmError(502, "The CRM returned data in an unexpected format")
-        if not edges:
-            raise ArtistNotFound(artist_id)
+        return data
 
+    @staticmethod
+    def _nodes(data: dict[str, Any], what: str) -> list[dict[str, Any]]:
         try:
-            return map_crm_record(edges[0]["node"])
+            return [edge["node"] for edge in data["pressKits"]["edges"]]
+        except (KeyError, TypeError):
+            log.error("Unexpected CRM payload for %s: %.200s", what, data)
+            raise CrmError(502, "The CRM returned data in an unexpected format")
+
+    async def get_epk(self, artist_id: str) -> Epk:
+        nodes = self._nodes(await self._query(PRESS_KIT_QUERY, {"slug": artist_id}, artist_id), artist_id)
+        if not nodes:
+            raise ArtistNotFound(artist_id)
+        try:
+            return map_crm_record(nodes[0])
         except ValidationError as exc:
             missing = ", ".join(".".join(map(str, e["loc"])) for e in exc.errors())
             log.error("Press kit %s is incomplete in the CRM: %s", artist_id, missing)
             raise CrmError(502, f"The press kit is missing required fields: {missing}")
+
+    async def get_roster(self) -> Roster:
+        return map_roster(self._nodes(await self._query(ROSTER_QUERY, {}, "the roster"), "the roster"))
 
     async def aclose(self) -> None:
         await self._http.aclose()

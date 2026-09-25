@@ -1,13 +1,13 @@
-export default function LoadingScreen() {
+export default function LoadingScreen({ label = "Loading press kit" }: { label?: string }) {
   return (
-    <div className="screen" role="status" aria-live="polite" aria-label="Loading press kit">
+    <div className="screen" role="status" aria-live="polite" aria-label={label}>
       <div className="loader" aria-hidden="true">
         <i />
         <i />
         <i />
         <i />
       </div>
-      <p>Loading press kit…</p>
+      <p>{label}…</p>
     </div>
   );
 }

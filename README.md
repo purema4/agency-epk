@@ -4,7 +4,7 @@ Electronic press kit for Berlin Records artists: a React + TypeScript page, ship
 `<artist-epk>` web component for GoDaddy, with a FastAPI backend that reads the CRM.
 
 ```
-src/            React app + <artist-epk> web component (src/embed)
+src/            React app + <artist-epk> / <artist-roster> web components (src/embed)
 backend/        FastAPI API that queries the CRM (see backend/README.md)
 embed-public/   Files deployed next to the embed script (Cloudflare headers, demo page)
 ```
@@ -13,7 +13,7 @@ embed-public/   Files deployed next to the embed script (Cloudflare headers, dem
 
 ```bash
 npm install
-npm run dev            # standalone page; /embed.html shows the web component on a fake host page
+npm run dev            # standalone page; /embed.html and /roster.html show the web components on a fake host page
 npm test               # vitest
 npm run build:embed    # dist-embed/artist-epk.js for the CDN
 ```
@@ -22,9 +22,21 @@ npm run build:embed    # dist-embed/artist-epk.js for the CDN
 
 ## GoDaddy (HTML section → Custom code)
 
+One artist's press kit:
+
 ```html
 <style>body{margin:0}</style>
 <artist-epk artist-id="ariovistus"></artist-epk>
+<script type="module" src="https://agency-epk.<your-subdomain>.workers.dev/artist-epk.js"></script>
+```
+
+Mosaic of every artist with a published press kit (main agency page). The same script registers
+both components. `href-template` is optional: each tile links there, with `{id}` replaced by the
+artist id; without it, tiles don't link anywhere.
+
+```html
+<style>body{margin:0}</style>
+<artist-roster href-template="https://berlinrecords.info/epk?artist={id}"></artist-roster>
 <script type="module" src="https://agency-epk.<your-subdomain>.workers.dev/artist-epk.js"></script>
 ```
 

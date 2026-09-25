@@ -1,13 +1,19 @@
 interface ErrorScreenProps {
+  title?: string;
   message: string;
   onRetry?: () => void;
   retrying?: boolean;
 }
 
-export default function ErrorScreen({ message, onRetry, retrying = false }: ErrorScreenProps) {
+export default function ErrorScreen({
+  title = "Couldn’t load the press kit",
+  message,
+  onRetry,
+  retrying = false,
+}: ErrorScreenProps) {
   return (
     <div className="screen" role="alert">
-      <h2>Couldn’t load the press kit</h2>
+      <h2>{title}</h2>
       <p>{message}</p>
       {onRetry && (
         <button type="button" className="bio-more" onClick={onRetry} disabled={retrying}>
