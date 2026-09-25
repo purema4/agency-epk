@@ -21,7 +21,7 @@ function wait(ms: number, signal?: AbortSignal | null) {
 /** A fetch() that answers GET .../artists/:id/epk from the sample data after a short delay. */
 export function createMockFetch(latencyMs = 400): typeof fetch {
   return async (input, init) => {
-    const url = new URL(input instanceof Request ? input.url : String(input), window.location.origin);
+    const url = new URL(input instanceof Request ? input.url : String(input), document.baseURI);
     await wait(latencyMs, init?.signal);
     const m = url.pathname.match(/\/artists\/([^/]+)\/epk\/?$/);
     return m ? epkResponse(decodeURIComponent(m[1])) : Response.json({ error: "Not found" }, { status: 404 });

@@ -26,9 +26,12 @@ export function createApiConfig(apiUrl?: string | null): ApiConfig {
   return apiUrl ? { baseUrl: apiUrl, fetch: networkFetch } : { baseUrl: "/api", fetch: mockFetch };
 }
 
-export function apiUrl(baseUrl: string, path: string): string {
+// Relative bases resolve against document.baseURI, not location.origin: GoDaddy runs custom code
+// in a srcdoc iframe, where location.origin is "null" (an invalid base, so new URL() would throw
+// before any request is made) while baseURI is the host page's URL.
+export function apiUrl(baseUrl: string, path: string, documentBase: string = document.baseURI): string {
   const base = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
-  return new URL(path.replace(/^\//, ""), new URL(base, window.location.origin)).toString();
+  return new URL(path.replace(/^\//, ""), new URL(base, documentBase)).toString();
 }
 
 export async function getJson<T>(api: ApiConfig, path: string, signal?: AbortSignal): Promise<T> {

@@ -17,6 +17,15 @@ describe("apiUrl", () => {
   it("keeps the path of an absolute base URL", () => {
     expect(apiUrl("https://crm.example.com/v1", "artists/x/epk")).toBe("https://crm.example.com/v1/artists/x/epk");
   });
+
+  it("works inside GoDaddy's srcdoc iframe, where location.origin is \"null\"", () => {
+    const srcdoc = "about:srcdoc";
+    expect(apiUrl("https://api.example.com", "artists/x/epk", srcdoc)).toBe("https://api.example.com/artists/x/epk");
+    // srcdoc documents inherit the host page's base URL, so relative bases still work.
+    expect(apiUrl("/api", "artists/x/epk", "https://berlinrecords.info/agency")).toBe(
+      "https://berlinrecords.info/api/artists/x/epk"
+    );
+  });
 });
 
 describe("createApiConfig", () => {
