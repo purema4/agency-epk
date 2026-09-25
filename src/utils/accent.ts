@@ -33,9 +33,9 @@ function lighten([r, g, b]: number[], points = 7): number[] {
   const l = (max + min) / 2;
   const d = max - min;
   const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
-  let h = 0;
+  let h = 0; // hue in sixths of the wheel, 0 <= h < 6
   if (d !== 0) {
-    if (max === rn) h = ((gn - bn) / d) % 6;
+    if (max === rn) h = ((gn - bn) / d + 6) % 6; // reds with more blue than green come out negative otherwise
     else if (max === gn) h = (bn - rn) / d + 2;
     else h = (rn - gn) / d + 4;
   }
@@ -50,7 +50,7 @@ function lighten([r, g, b]: number[], points = 7): number[] {
     [0, x, c],
     [x, 0, c],
     [c, 0, x],
-  ][Math.floor((h + 6) % 6)];
+  ][Math.floor(h)];
   return [r1, g1, b1].map((v) => (v + m) * 255);
 }
 

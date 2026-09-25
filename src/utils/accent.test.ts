@@ -38,6 +38,27 @@ describe("accentStyle", () => {
     expect(accentStyle("#1a3cff")!["--on-accent"]).toBe("#fff");
   });
 
+  // Hue in degrees, to check the hover shade stays the same color, only lighter.
+  const hue = (hex: string) => {
+    const [r, g, b] = parseHex(hex)!.map((c) => c / 255);
+    const max = Math.max(r, g, b);
+    const d = max - Math.min(r, g, b);
+    const h = max === r ? (g - b) / d : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    return (h * 60 + 360) % 360;
+  };
+
+  it.each(["#e0112b", "#ff00aa", "#c24a0c", "#ffe600", "#1fd1a5", "#0033ff", "#8a5cff", "#ff0000", "#b0107a"])(
+    "gives %s a valid, lighter hover shade of the same hue",
+    (color) => {
+      const hi = String(accentStyle(color)!["--orange-hi"]);
+      expect(hi).toMatch(/^#[0-9a-f]{6}$/);
+      const diff = Math.abs(hue(hi) - hue(color));
+      expect(Math.min(diff, 360 - diff)).toBeLessThan(2);
+      const sum = (c: string) => parseHex(c)!.reduce((a, b) => a + b);
+      expect(sum(hi)).toBeGreaterThan(sum(color));
+    }
+  );
+
   it("works for greys (no hue)", () => {
     expect(accentStyle("#808080")!["--orange-hi"]).toBe("#929292");
   });
