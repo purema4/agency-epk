@@ -13,6 +13,7 @@ import { createApiConfig } from "../api/client";
 import { ApiProvider } from "../api/context";
 import App from "../App";
 import { createQueryClient } from "../queryClient";
+import { fitFrameToContent } from "./fitFrame";
 import baseCss from "../styles/global.css?inline";
 import embedCss from "./embed.css?inline";
 
@@ -62,6 +63,7 @@ export class ArtistEpkElement extends HTMLElement {
       shadow.replaceChildren(style, this.#mount);
     }
     ensureFonts(this.ownerDocument);
+    fitFrameToContent(this.ownerDocument.defaultView);
     this.#root ??= createRoot(this.#mount);
     this.#render();
   }
