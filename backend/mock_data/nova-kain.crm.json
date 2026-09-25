@@ -1,0 +1,111 @@
+{
+  "name": "NOVA KAIN",
+  "label": "NOCTURN RECORDS",
+  "kicker": "TALENT - EPK - 2026",
+  "photo": {
+    "primaryLinkUrl": "https://picsum.photos/seed/nova-kain/1200/1500"
+  },
+  "photoAlt": "Placeholder photo for NOVA KAIN",
+  "tags": [
+    "HARD TECHNO",
+    "INDUSTRIAL",
+    "RAW"
+  ],
+  "platforms": {
+    "primaryLinkUrl": "https://open.spotify.com/artist/U8JZpDE0iGXlD6gNCFbaEP",
+    "primaryLinkLabel": "Spotify",
+    "secondaryLinks": [
+      {
+        "url": "https://soundcloud.com/nova-kain",
+        "label": "SoundCloud"
+      },
+      {
+        "url": "https://www.instagram.com/novakain/",
+        "label": "Instagram"
+      }
+    ]
+  },
+  "lede": "NOVA KAIN is a fictional sample artist, here to fill the roster while the real data lives in the CRM.",
+  "bioShort": "Nova grew up between warehouse raves and late-night radio, and turned that into a hard techno sound built for dark rooms and long sets. This bio is placeholder text for local testing.",
+  "bioExtra": "Sample extra bio: labels, key gigs, residencies and what a set feels like on the floor.",
+  "bookingContact": "",
+  "bookingEmail": {
+    "primaryEmail": "bookings@berlinrecords.world"
+  },
+  "agencyLink": {
+    "primaryLinkUrl": "https://berlinrecords.info/agency",
+    "primaryLinkLabel": "BERLINRECORDS.INFO/AGENCY"
+  },
+  "artist": {
+    "name": "Nova",
+    "stageName": "NOVA KAIN",
+    "socialLinks": {
+      "primaryLinkUrl": "",
+      "primaryLinkLabel": "",
+      "secondaryLinks": []
+    }
+  },
+  "position": 1,
+  "stats": {
+    "edges": [
+      {
+        "node": {
+          "name": "Spotify monthly listeners",
+          "value": "13K",
+          "position": 0
+        }
+      },
+      {
+        "node": {
+          "name": "Instagram followers",
+          "value": "38,6K",
+          "position": 1
+        }
+      },
+      {
+        "node": {
+          "name": "Performances a year",
+          "value": "13+",
+          "position": 2
+        }
+      }
+    ]
+  },
+  "charts": {
+    "edges": [
+      {
+        "node": {
+          "name": "Second Sun",
+          "recordLabel": "Nocturn Records",
+          "chartPosition": "29TH",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/ool8DklZDOCj2ISaJiHkTj"
+          },
+          "position": 0
+        }
+      },
+      {
+        "node": {
+          "name": "Nightfall",
+          "recordLabel": "Nocturn Records",
+          "chartPosition": "88TH",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/LGlkoMXGjtEkDnNfribxUd"
+          },
+          "position": 1
+        }
+      },
+      {
+        "node": {
+          "name": "Pressure Point",
+          "recordLabel": "Nocturn Records",
+          "chartPosition": "75TH",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/7dXTPyLsxPFkThf4VucSmE"
+          },
+          "position": 2
+        }
+      }
+    ]
+  }
+}

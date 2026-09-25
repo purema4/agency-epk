@@ -1,0 +1,111 @@
+{
+  "name": "ECHO MARAIS",
+  "label": "BERLIN RECORDS",
+  "kicker": "TALENT - EPK - 2026",
+  "photo": {
+    "primaryLinkUrl": "https://picsum.photos/seed/echo-marais/1200/1500"
+  },
+  "photoAlt": "Placeholder photo for ECHO MARAIS",
+  "tags": [
+    "DEEP TECHNO",
+    "HYPNOTIC",
+    "DUB"
+  ],
+  "platforms": {
+    "primaryLinkUrl": "https://open.spotify.com/artist/OqOAf1lLQSAJaiXnkU8Is2",
+    "primaryLinkLabel": "Spotify",
+    "secondaryLinks": [
+      {
+        "url": "https://soundcloud.com/echo-marais",
+        "label": "SoundCloud"
+      },
+      {
+        "url": "https://www.instagram.com/echomarais/",
+        "label": "Instagram"
+      }
+    ]
+  },
+  "lede": "ECHO MARAIS is a fictional sample artist, here to fill the roster while the real data lives in the CRM.",
+  "bioShort": "Echo grew up between warehouse raves and late-night radio, and turned that into a deep techno sound built for dark rooms and long sets. This bio is placeholder text for local testing.",
+  "bioExtra": "Sample extra bio: labels, key gigs, residencies and what a set feels like on the floor.",
+  "bookingContact": "",
+  "bookingEmail": {
+    "primaryEmail": "bookings@berlinrecords.world"
+  },
+  "agencyLink": {
+    "primaryLinkUrl": "https://berlinrecords.info/agency",
+    "primaryLinkLabel": "BERLINRECORDS.INFO/AGENCY"
+  },
+  "artist": {
+    "name": "Echo",
+    "stageName": "ECHO MARAIS",
+    "socialLinks": {
+      "primaryLinkUrl": "",
+      "primaryLinkLabel": "",
+      "secondaryLinks": []
+    }
+  },
+  "position": 3,
+  "stats": {
+    "edges": [
+      {
+        "node": {
+          "name": "Spotify monthly listeners",
+          "value": "67K",
+          "position": 0
+        }
+      },
+      {
+        "node": {
+          "name": "Instagram followers",
+          "value": "42,0K",
+          "position": 1
+        }
+      },
+      {
+        "node": {
+          "name": "Performances a year",
+          "value": "39+",
+          "position": 2
+        }
+      }
+    ]
+  },
+  "charts": {
+    "edges": [
+      {
+        "node": {
+          "name": "Voltage",
+          "recordLabel": "Berlin Records",
+          "chartPosition": "88TH",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/zjZZZZGeoZDMENcKHVmDGA"
+          },
+          "position": 0
+        }
+      },
+      {
+        "node": {
+          "name": "Second Sun",
+          "recordLabel": "Berlin Records",
+          "chartPosition": "73RD",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/JiG8XnBE3NnYJoQ9WmXeHH"
+          },
+          "position": 1
+        }
+      },
+      {
+        "node": {
+          "name": "Neon Rain",
+          "recordLabel": "Berlin Records",
+          "chartPosition": "63RD",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/deeTFJGvVvQe1sKhBN88hX"
+          },
+          "position": 2
+        }
+      }
+    ]
+  }
+}

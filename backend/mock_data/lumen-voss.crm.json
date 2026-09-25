@@ -1,0 +1,111 @@
+{
+  "name": "LUMEN VOSS",
+  "label": "AFTERGLOW AUDIO",
+  "kicker": "TALENT - EPK - 2026",
+  "photo": {
+    "primaryLinkUrl": "https://picsum.photos/seed/lumen-voss/1200/1500"
+  },
+  "photoAlt": "Placeholder photo for LUMEN VOSS",
+  "tags": [
+    "MELODIC",
+    "PROGRESSIVE",
+    "EMOTIVE"
+  ],
+  "platforms": {
+    "primaryLinkUrl": "https://open.spotify.com/artist/HgaKwVJ7faC9qEwjky40UV",
+    "primaryLinkLabel": "Spotify",
+    "secondaryLinks": [
+      {
+        "url": "https://soundcloud.com/lumen-voss",
+        "label": "SoundCloud"
+      },
+      {
+        "url": "https://www.instagram.com/lumenvoss/",
+        "label": "Instagram"
+      }
+    ]
+  },
+  "lede": "LUMEN VOSS is a fictional sample artist, here to fill the roster while the real data lives in the CRM.",
+  "bioShort": "Lumen grew up between warehouse raves and late-night radio, and turned that into a melodic sound built for dark rooms and long sets. This bio is placeholder text for local testing.",
+  "bioExtra": "Sample extra bio: labels, key gigs, residencies and what a set feels like on the floor.",
+  "bookingContact": "",
+  "bookingEmail": {
+    "primaryEmail": "bookings@berlinrecords.world"
+  },
+  "agencyLink": {
+    "primaryLinkUrl": "https://berlinrecords.info/agency",
+    "primaryLinkLabel": "BERLINRECORDS.INFO/AGENCY"
+  },
+  "artist": {
+    "name": "Lumen",
+    "stageName": "LUMEN VOSS",
+    "socialLinks": {
+      "primaryLinkUrl": "",
+      "primaryLinkLabel": "",
+      "secondaryLinks": []
+    }
+  },
+  "position": 2,
+  "stats": {
+    "edges": [
+      {
+        "node": {
+          "name": "Spotify monthly listeners",
+          "value": "90K",
+          "position": 0
+        }
+      },
+      {
+        "node": {
+          "name": "Instagram followers",
+          "value": "25,9K",
+          "position": 1
+        }
+      },
+      {
+        "node": {
+          "name": "Performances a year",
+          "value": "41+",
+          "position": 2
+        }
+      }
+    ]
+  },
+  "charts": {
+    "edges": [
+      {
+        "node": {
+          "name": "Nightfall",
+          "recordLabel": "Afterglow Audio",
+          "chartPosition": "9TH",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/1F8ResqEDusTpkr0cStY4q"
+          },
+          "position": 0
+        }
+      },
+      {
+        "node": {
+          "name": "Neon Rain",
+          "recordLabel": "Afterglow Audio",
+          "chartPosition": "45TH",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/B8dWKnHfDNxSIvPZZ63fFK"
+          },
+          "position": 1
+        }
+      },
+      {
+        "node": {
+          "name": "Iron Bloom",
+          "recordLabel": "Afterglow Audio",
+          "chartPosition": "58TH",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/ZjR4I0b3jRtaWr4Y9OJFLJ"
+          },
+          "position": 2
+        }
+      }
+    ]
+  }
+}

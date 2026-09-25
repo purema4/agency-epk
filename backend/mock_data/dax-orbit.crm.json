@@ -1,0 +1,111 @@
+{
+  "name": "DAX ORBIT",
+  "label": "ORBITAL SOUND",
+  "kicker": "TALENT - EPK - 2026",
+  "photo": {
+    "primaryLinkUrl": "https://picsum.photos/seed/dax-orbit/1200/1500"
+  },
+  "photoAlt": "Placeholder photo for DAX ORBIT",
+  "tags": [
+    "TRANCE",
+    "PSY",
+    "UPLIFTING"
+  ],
+  "platforms": {
+    "primaryLinkUrl": "https://open.spotify.com/artist/VFz8uZdZv8FuKKIBJl5dzp",
+    "primaryLinkLabel": "Spotify",
+    "secondaryLinks": [
+      {
+        "url": "https://soundcloud.com/dax-orbit",
+        "label": "SoundCloud"
+      },
+      {
+        "url": "https://www.instagram.com/daxorbit/",
+        "label": "Instagram"
+      }
+    ]
+  },
+  "lede": "DAX ORBIT is a fictional sample artist, here to fill the roster while the real data lives in the CRM.",
+  "bioShort": "Dax grew up between warehouse raves and late-night radio, and turned that into a trance sound built for dark rooms and long sets. This bio is placeholder text for local testing.",
+  "bioExtra": "Sample extra bio: labels, key gigs, residencies and what a set feels like on the floor.",
+  "bookingContact": "",
+  "bookingEmail": {
+    "primaryEmail": "bookings@berlinrecords.world"
+  },
+  "agencyLink": {
+    "primaryLinkUrl": "https://berlinrecords.info/agency",
+    "primaryLinkLabel": "BERLINRECORDS.INFO/AGENCY"
+  },
+  "artist": {
+    "name": "Dax",
+    "stageName": "DAX ORBIT",
+    "socialLinks": {
+      "primaryLinkUrl": "",
+      "primaryLinkLabel": "",
+      "secondaryLinks": []
+    }
+  },
+  "position": 5,
+  "stats": {
+    "edges": [
+      {
+        "node": {
+          "name": "Spotify monthly listeners",
+          "value": "20K",
+          "position": 0
+        }
+      },
+      {
+        "node": {
+          "name": "Instagram followers",
+          "value": "42,9K",
+          "position": 1
+        }
+      },
+      {
+        "node": {
+          "name": "Performances a year",
+          "value": "40+",
+          "position": 2
+        }
+      }
+    ]
+  },
+  "charts": {
+    "edges": [
+      {
+        "node": {
+          "name": "Pulse Theory",
+          "recordLabel": "Orbital Sound",
+          "chartPosition": "71ST",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/jIBAzupGhv7Ib3M03NBQNS"
+          },
+          "position": 0
+        }
+      },
+      {
+        "node": {
+          "name": "Afterimage",
+          "recordLabel": "Orbital Sound",
+          "chartPosition": "65TH",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/PwlUQia1ID6vW5dql05ha0"
+          },
+          "position": 1
+        }
+      },
+      {
+        "node": {
+          "name": "Glass Horizon",
+          "recordLabel": "Orbital Sound",
+          "chartPosition": "65TH",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/IiJhgB3cxLmAxzJLJenuHj"
+          },
+          "position": 2
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "name": "KIRA STAHL",
+  "label": "STAHLWERK",
+  "kicker": "TALENT - EPK - 2026",
+  "photo": {
+    "primaryLinkUrl": "https://picsum.photos/seed/kira-stahl/1200/1500"
+  },
+  "photoAlt": "Placeholder photo for KIRA STAHL",
+  "tags": [
+    "PEAK TIME",
+    "ACID",
+    "DRIVEN"
+  ],
+  "platforms": {
+    "primaryLinkUrl": "https://open.spotify.com/artist/Jsi6BwhTp3Fs2QhX6KWxOi",
+    "primaryLinkLabel": "Spotify",
+    "secondaryLinks": [
+      {
+        "url": "https://soundcloud.com/kira-stahl",
+        "label": "SoundCloud"
+      },
+      {
+        "url": "https://www.instagram.com/kirastahl/",
+        "label": "Instagram"
+      }
+    ]
+  },
+  "lede": "KIRA STAHL is a fictional sample artist, here to fill the roster while the real data lives in the CRM.",
+  "bioShort": "Kira grew up between warehouse raves and late-night radio, and turned that into a peak time sound built for dark rooms and long sets. This bio is placeholder text for local testing.",
+  "bioExtra": "Sample extra bio: labels, key gigs, residencies and what a set feels like on the floor.",
+  "bookingContact": "",
+  "bookingEmail": {
+    "primaryEmail": "bookings@berlinrecords.world"
+  },
+  "agencyLink": {
+    "primaryLinkUrl": "https://berlinrecords.info/agency",
+    "primaryLinkLabel": "BERLINRECORDS.INFO/AGENCY"
+  },
+  "artist": {
+    "name": "Kira",
+    "stageName": "KIRA STAHL",
+    "socialLinks": {
+      "primaryLinkUrl": "",
+      "primaryLinkLabel": "",
+      "secondaryLinks": []
+    }
+  },
+  "position": 4,
+  "stats": {
+    "edges": [
+      {
+        "node": {
+          "name": "Spotify monthly listeners",
+          "value": "71K",
+          "position": 0
+        }
+      },
+      {
+        "node": {
+          "name": "Instagram followers",
+          "value": "52,8K",
+          "position": 1
+        }
+      },
+      {
+        "node": {
+          "name": "Performances a year",
+          "value": "31+",
+          "position": 2
+        }
+      }
+    ]
+  },
+  "charts": {
+    "edges": [
+      {
+        "node": {
+          "name": "Pulse Theory",
+          "recordLabel": "Stahlwerk",
+          "chartPosition": "98TH",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/2MzP0ZvzOMhfWuBByReQMs"
+          },
+          "position": 0
+        }
+      },
+      {
+        "node": {
+          "name": "Undertow",
+          "recordLabel": "Stahlwerk",
+          "chartPosition": "78TH",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/9Wcz7uW9XFOGOeMVNen5n1"
+          },
+          "position": 1
+        }
+      },
+      {
+        "node": {
+          "name": "Nightfall",
+          "recordLabel": "Stahlwerk",
+          "chartPosition": "1ST",
+          "spotifyLink": {
+            "primaryLinkUrl": "https://open.spotify.com/track/e6pWzpF1qH6YytwMe4Lbyo"
+          },
+          "position": 2
+        }
+      }
+    ]
+  }
+}
