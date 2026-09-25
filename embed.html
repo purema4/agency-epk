@@ -14,6 +14,11 @@
   <body>
     <div class="host"><h1>Host site header</h1><p>Content above the embed.</p></div>
     <artist-epk artist-id="ariovistus"></artist-epk>
+    <script>
+      // Dev only: ?artist=<id> picks the artist, so the roster demo's tile links open the right one.
+      const artist = new URLSearchParams(location.search).get("artist");
+      if (artist) document.querySelector("artist-epk").setAttribute("artist-id", artist);
+    </script>
     <div class="host"><p>Content below the embed.</p></div>
     <script type="module" src="/src/embed/index.tsx"></script>
   </body>
