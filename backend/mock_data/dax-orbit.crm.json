@@ -2,6 +2,7 @@
   "name": "DAX ORBIT",
   "label": "ORBITAL SOUND",
   "kicker": "TALENT - EPK - 2026",
+  "accentColor": "#1FD1A5",
   "photo": {
     "primaryLinkUrl": "https://picsum.photos/seed/dax-orbit/1200/1500"
   },

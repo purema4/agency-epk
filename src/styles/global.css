@@ -2,6 +2,7 @@
 :root,:host{
   --bg:#050506; --panel:#141417; --ink:#f4f4f2; --dim:#9a9aa0;
   --orange:#c24a0c; --orange-hi:#e2600f; --cyan:#43f0e4;
+  --on-accent:#fff; /* text on the accent; an artist's accent color can switch it to dark */
   --beat:.444s;
   color-scheme:dark;
   box-sizing:border-box;
@@ -65,11 +66,11 @@ a{color:inherit}
   .tags{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
   .tag{min-width:0;padding:.8em .4em;display:flex;align-items:center;justify-content:center;border-width:2px}
 }
-.tag:hover{border-color:var(--orange-hi)}
+.tag:hover{border-color:var(--orange-hi);color:var(--on-accent)}
 .tag:hover::before{transform:none}
 .platforms{display:flex;flex-wrap:wrap;gap:.5rem}
 .platforms a{font-size:.8rem;font-weight:500;text-decoration:none;padding:.55em 1em;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);transition:background .2s,color .2s}
-.platforms a:hover,.platforms a:focus-visible{background:var(--orange);border-color:var(--orange-hi);color:#fff;transform:translateY(-2px)}
+.platforms a:hover,.platforms a:focus-visible{background:var(--orange);border-color:var(--orange-hi);color:var(--on-accent);transform:translateY(-2px)}
 .platforms a{transition:background .2s,border-color .2s,transform .2s}
 
 /* ---------- BODY ---------- */
@@ -97,7 +98,7 @@ main{background:#000}
 h2{color:var(--orange-hi);font-weight:500;font-size:clamp(1.3rem,2.2vw,1.7rem);margin:0 0 .5rem;letter-spacing:.01em}
 .bio p{margin:0;font-size:clamp(1rem,1.5vw,1.2rem);line-height:1.62;max-width:36em;hyphens:auto}
 .bio-more{margin-top:1.2rem;background:none;border:2px solid var(--orange);color:var(--ink);font:inherit;font-weight:500;cursor:pointer;padding:.55em 1.2em;transition:background .2s}
-.bio-more:hover{background:var(--orange)}
+.bio-more:hover{background:var(--orange);color:var(--on-accent)}
 .bio p{transition:color .3s}
 .bio:hover p{color:#fff}
 .bio-extra{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s ease}
@@ -109,6 +110,7 @@ h2{color:var(--orange-hi);font-weight:500;font-size:clamp(1.3rem,2.2vw,1.7rem);m
 .chart li{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) auto;align-items:center;gap:1rem;padding:1rem .8rem;border-bottom:1px solid #1e1e22;font-size:clamp(1rem,1.6vw,1.3rem);cursor:default;overflow:hidden}
 .chart li::before{content:"";position:absolute;inset:0;background:var(--orange);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.2,.8,.1,1);z-index:0}
 .chart li:hover::before,.chart li:focus-within::before{transform:none}
+.chart li:hover,.chart li:focus-within{color:var(--on-accent)}
 .chart li>*{position:relative;z-index:1}
 /* Linked rows: an empty link stretched over the whole row, above the text. */
 .chart li.linked{cursor:pointer}
@@ -124,7 +126,7 @@ h2{color:var(--orange-hi);font-weight:500;font-size:clamp(1.3rem,2.2vw,1.7rem);m
 .eq i:nth-child(2){animation-delay:-.2s!important}.eq i:nth-child(3){animation-delay:-.35s!important}
 @keyframes eq{to{height:100%}}
 
-.booking{transition:background .3s;background:var(--orange);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1rem 2rem;padding:1.4rem 2rem;margin-bottom:3rem;font-size:clamp(.95rem,1.6vw,1.3rem);font-weight:400;line-height:1.35}
+.booking{transition:background .3s;background:var(--orange);color:var(--on-accent);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1rem 2rem;padding:1.4rem 2rem;margin-bottom:3rem;font-size:clamp(.95rem,1.6vw,1.3rem);font-weight:400;line-height:1.35}
 .booking a{text-decoration:none}
 /* One unbreakable word (~19em in caps): shrink it to the box's width on phones, break it only as a last resort. */
 .booking{container-type:inline-size}
@@ -142,7 +144,7 @@ h2{color:var(--orange-hi);font-weight:500;font-size:clamp(1.3rem,2.2vw,1.7rem);m
 .progress{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--orange);transform-origin:left;transform:scaleX(0);z-index:40;pointer-events:none}
 .cursor{position:fixed;left:0;top:0;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--orange-hi);pointer-events:none;z-index:50;transition:width .25s,height .25s,margin .25s,background .25s,opacity .25s;mix-blend-mode:normal;opacity:0}
 .cursor.on{opacity:1}
-.cursor.big{width:46px;height:46px;margin:-23px 0 0 -23px;background:rgba(226,96,15,.25);border:1.5px solid var(--orange-hi)}
+.cursor.big{width:46px;height:46px;margin:-23px 0 0 -23px;background:color-mix(in srgb,var(--orange-hi) 25%,transparent);border:1.5px solid var(--orange-hi)}
 @media (pointer:coarse){.cursor{display:none}}
 
 .toast{position:fixed;left:50%;bottom:calc(5rem + env(safe-area-inset-bottom,0px));translate:-50% 20px;background:var(--ink);color:#000;font-weight:500;font-size:.85rem;padding:.6em 1.1em;opacity:0;pointer-events:none;transition:opacity .25s,translate .25s;z-index:30}

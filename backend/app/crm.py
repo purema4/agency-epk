@@ -20,6 +20,7 @@ query PressKit($slug: String!) {
         name
         label
         kicker
+        accentColor
         photo { primaryLinkUrl }
         photoAlt
         tags
@@ -104,6 +105,16 @@ def _url(value: Any) -> str | None:
     return None
 
 
+def _hex_color(value: Any) -> str | None:
+    """A hex color typed into the CRM ("#C24A0C", "c24a0c", "#fa0") as "#rrggbb", or None."""
+    text = (_text(value) or "").removeprefix("#").lower()
+    if len(text) == 3:
+        text = "".join(c * 2 for c in text)
+    if len(text) == 6 and all(c in "0123456789abcdef" for c in text):
+        return f"#{text}"
+    return None
+
+
 def _nodes(connection: Any) -> list[dict]:
     """Records of a one-to-many relation, in the order they're arranged in the CRM."""
     nodes = [edge["node"] for edge in (connection or {}).get("edges", [])]
@@ -152,6 +163,7 @@ def map_crm_record(kit: dict[str, Any]) -> Epk:
             "name": name,
             "label": _text(kit.get("label")) or "",
             "kicker": _text(kit.get("kicker")) or "",
+            "accentColor": _hex_color(kit.get("accentColor")),
             "photo": {
                 "src": _url((kit.get("photo") or {}).get("primaryLinkUrl")),
                 "alt": _text(kit.get("photoAlt")) or name,

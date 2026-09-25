@@ -39,6 +39,7 @@ export function isEpk(v: unknown): v is Epk {
     arrOf(charts, isChartEntry) &&
     isObj(booking) &&
     (booking.contact === undefined || isStr(booking.contact)) &&
-    hasStrings("email", "agencyUrl", "agencyLabel")(booking)
+    hasStrings("email", "agencyUrl", "agencyLabel")(booking) &&
+    optStr(v.accentColor)
   );
 }

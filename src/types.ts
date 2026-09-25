@@ -46,6 +46,8 @@ export interface Epk {
   bio: BioContent;
   charts: ChartEntry[];
   booking: BookingInfo;
+  /** "#rrggbb" from the CRM; replaces the default orange accent when set. */
+  accentColor?: string;
 }
 
 /** One tile of the <artist-roster> mosaic. `id` is the artist-id of that artist's <artist-epk>. */

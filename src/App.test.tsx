@@ -17,6 +17,24 @@ describe("App", () => {
     expect(document.title).toBe("ARIOVISTUS · TALENT - EPK - 2026");
   });
 
+  it("uses the artist's accent color, or keeps the default orange", async () => {
+    artists.nova = { ...ariovistus, name: "NOVA", accentColor: "#ffe600" };
+    try {
+      const { container, unmount } = renderWithQuery(<App artistId="nova" />);
+      await screen.findByRole("heading", { level: 1, name: "NOVA" });
+      const root = container.querySelector<HTMLElement>(".epk")!;
+      expect(root.style.getPropertyValue("--orange")).toBe("#ffe600");
+      expect(root.style.getPropertyValue("--on-accent")).toBe("#050506"); // dark text on yellow
+      unmount();
+
+      const plain = renderWithQuery(<App artistId="ariovistus" />);
+      await screen.findByRole("heading", { level: 1, name: "ARIOVISTUS" });
+      expect(plain.container.querySelector<HTMLElement>(".epk")!.style.getPropertyValue("--orange")).toBe("");
+    } finally {
+      delete artists.nova;
+    }
+  });
+
   it("renders whatever artist the CRM returns", async () => {
     artists.nova = { ...ariovistus, name: "NOVA", tags: ["HARD TECHNO"], charts: [] };
     try {

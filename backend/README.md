@@ -57,6 +57,7 @@ One GraphQL request per artist (`PRESS_KIT_QUERY` in `app/crm.py`) fetches the *
 |---|---|
 | `name` | Display Name, else the artist's Stage Name / Name |
 | `label`, `kicker`, `lede` | Label, Kicker, Lede |
+| `accentColor` | Accent Color as `#rrggbb` (`#RGB` and a missing `#` are accepted); omitted when empty or not a hex color, and the EPK keeps its orange |
 | `photo.src` / `photo.alt` | Hero Photo (a public URL) / Hero Photo Alt Text, else the name |
 | `tags` | Tags |
 | `platforms` | Platforms links (link label = platform name, guessed from the URL when empty), else the artist's Social & Website Links |

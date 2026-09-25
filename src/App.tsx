@@ -6,6 +6,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import ScrollProgress from "./components/ScrollProgress";
 import { ToastProvider } from "./components/Toast";
 import { useEpk } from "./hooks/useEpk";
+import { accentStyle } from "./utils/accent";
 
 interface AppProps {
   artistId: string;
@@ -23,7 +24,7 @@ export default function App({ artistId, syncDocumentTitle = false }: AppProps) {
   }, [syncDocumentTitle, data]);
 
   return (
-    <div className="epk">
+    <div className="epk" style={accentStyle(data?.accentColor)}>
       <ToastProvider>
         {!artistId ? (
           <ErrorScreen message={MISSING_ARTIST_MESSAGE} />

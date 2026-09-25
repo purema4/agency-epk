@@ -109,3 +109,16 @@ def test_only_web_links_leave_the_api(url):
         epk(photo={"primaryLinkUrl": url})
     with pytest.raises(ValidationError):
         epk(agencyLink={"primaryLinkUrl": url})
+
+
+@pytest.mark.parametrize(
+    ("typed", "sent"),
+    [("#C24A0C", "#c24a0c"), ("c24a0c", "#c24a0c"), (" #FA0 ", "#ffaa00"), ("", None), (None, None)],
+)
+def test_accent_color_is_normalised(typed, sent):
+    assert epk(accentColor=typed).get("accentColor") == sent
+
+
+@pytest.mark.parametrize("typed", ["orange", "#12345", "#GGGGGG", "red;background:url(x)", "#c24a0c80"])
+def test_invalid_accent_colors_fall_back_to_the_default(typed):
+    assert "accentColor" not in epk(accentColor=typed)

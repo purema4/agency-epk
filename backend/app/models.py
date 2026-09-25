@@ -64,3 +64,4 @@ class Epk(CamelModel):
     bio: BioContent
     charts: list[ChartEntry]
     booking: BookingInfo
+    accent_color: str | None = None  # "#rrggbb"; the EPK falls back to its orange when absent
