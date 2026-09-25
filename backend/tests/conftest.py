@@ -19,6 +19,17 @@ def graphql_answer(*nodes: dict) -> httpx.Response:
     return httpx.Response(200, json={"data": {"pressKits": {"edges": [{"node": n} for n in nodes]}}})
 
 
+def kit_handler(node: dict, slug: str = "ariovistus") -> Callable[[httpx.Request], httpx.Response]:
+    """A CRM that has one published kit: `node` answers the press kit query, and the roster lists it."""
+
+    def handle(request: httpx.Request) -> httpx.Response:
+        if "slug" in json.loads(request.content)["variables"]:
+            return graphql_answer(node)
+        return graphql_answer({**ARIOVISTUS_CRM, "slug": slug})
+
+    return handle
+
+
 class FakeCrm:
     """Stands in for Twenty's GraphQL API over httpx.MockTransport; records every request it receives."""
 

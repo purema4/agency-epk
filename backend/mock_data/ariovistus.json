@@ -5,11 +5,10 @@
   "photo": { "src": "http://localhost:8001/static/hero.jpg", "alt": "ARIOVISTUS behind the decks, lit by a cyan neon ring" },
   "tags": ["PEAK TECHNO", "DRIVEN", "MELODIC"],
   "platforms": [
-    { "name": "Spotify", "url": "#" },
-    { "name": "Beatport", "url": "#" },
-    { "name": "SoundCloud", "url": "#" },
-    { "name": "YouTube", "url": "#" },
-    { "name": "Instagram", "url": "#" }
+    { "name": "Spotify", "url": "https://open.spotify.com/artist/56zZkc4hPcagnOYV3g3xSB" },
+    { "name": "SoundCloud", "url": "https://soundcloud.com/ariovistus-dj" },
+    { "name": "YouTube", "url": "https://www.youtube.com/@ariovistus3232" },
+    { "name": "Instagram", "url": "https://www.instagram.com/ariovistus_ofc/" }
   ],
   "lede": "ARIOVISTUS co-founded Berlin Records and built OUTKZT into a global, nomadic techno movement rooted in freedom over comfort.",
   "stats": [

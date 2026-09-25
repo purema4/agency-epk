@@ -3,7 +3,7 @@ import json
 import httpx
 import pytest
 
-from .conftest import ARIOVISTUS, ARIOVISTUS_CRM, TOKEN, graphql_answer
+from .conftest import ARIOVISTUS, ARIOVISTUS_CRM, TOKEN, graphql_answer, kit_handler
 
 URL = "/artists/ariovistus/epk"
 
@@ -17,11 +17,12 @@ def test_returns_the_press_kit_from_the_crm(client, crm):
 
 def test_queries_twenty_graphql_with_the_bearer_token(client, crm):
     client.get(URL)
-    [req] = crm.requests
-    assert req.headers["authorization"] == f"Bearer {TOKEN}"
-    assert req.method == "POST"
-    assert req.url == "https://crm.test/v1/graphql"
-    body = json.loads(req.content)
+    roster, kit = crm.requests  # the id is checked against the roster first
+    for req in (roster, kit):
+        assert req.headers["authorization"] == f"Bearer {TOKEN}"
+        assert req.method == "POST"
+        assert req.url == "https://crm.test/v1/graphql"
+    body = json.loads(kit.content)
     assert body["variables"] == {"slug": "ariovistus"}
     assert "isPublished: { eq: true }" in body["query"]  # drafts are never served
 
@@ -35,7 +36,7 @@ def test_never_exposes_the_token(client):
 def test_caches_crm_answers(client, crm):
     assert client.get(URL).status_code == 200
     assert client.get("/artists/ARIOVISTUS/epk").status_code == 200  # ids are case-insensitive
-    assert len(crm.requests) == 1
+    assert len(crm.requests) == 2  # one roster + one press kit
 
 
 def test_unknown_artist_is_404(client):
@@ -68,7 +69,7 @@ def test_errors_are_not_cached(client, crm):
             502,
             "The CRM rejected the press kit query",
         ),
-        (lambda req: graphql_answer({"name": "Only a name"}), 502, "missing required fields"),
+        (kit_handler({**ARIOVISTUS_CRM, "bioShort": ""}), 502, "The press kit is incomplete in the CRM"),
     ],
 )
 def test_crm_failures_become_gateway_errors(client, crm, crm_answer, status, detail):
@@ -155,7 +156,33 @@ def test_cors_only_allows_get(client):
 
 def test_omits_empty_optional_fields_instead_of_sending_null(client, crm):
     record = {**ARIOVISTUS_CRM, "bioExtra": "", "bookingContact": None}  # Twenty stores empty text as ""
-    crm.handler = lambda req: graphql_answer(record)
+    crm.handler = kit_handler(record)
     body = client.get(URL).json()
     assert "extra" not in body["bio"]
     assert "contact" not in body["booking"]
+
+
+def test_unknown_ids_never_reach_the_crm_beyond_the_cached_roster(client, crm):
+    for i in range(20):
+        assert client.get(f"/artists/made-up-{i}/epk").status_code == 404
+    [roster] = crm.requests  # one roster lookup, no press kit queries
+    assert "slug" not in json.loads(roster.content)["variables"]
+
+
+def test_press_kit_details_do_not_leak_in_errors(client, crm):
+    crm.handler = kit_handler({**ARIOVISTUS_CRM, "bioShort": ""})
+    assert "bio" not in client.get(URL).json()["detail"].lower()
+
+
+@pytest.mark.parametrize("path", ["/docs", "/redoc", "/openapi.json"])
+def test_api_docs_are_not_public(client, path):
+    assert client.get(path).status_code == 404
+
+
+@pytest.mark.parametrize("path", ["/health", URL, "/artists", "/artists/nobody/epk"])
+def test_security_headers_on_every_response(client, path):
+    res = client.get(path)
+    assert res.headers["content-security-policy"] == "default-src 'none'; frame-ancestors 'none'"
+    assert res.headers["x-content-type-options"] == "nosniff"
+    assert res.headers["x-frame-options"] == "DENY"
+    assert res.headers["referrer-policy"] == "no-referrer"

@@ -92,3 +92,20 @@ def test_agency_label_defaults_to_the_bare_url():
 def test_required_fields_must_be_filled_in(missing):
     with pytest.raises(ValidationError):
         epk(**missing)
+
+
+@pytest.mark.parametrize("url", ["javascript:alert(1)", "JaVaScRiPt:alert(1)", "data:text/html,<b>x</b>", "#", "ftp://x.test/a"])
+def test_only_web_links_leave_the_api(url):
+    links = {"primaryLinkUrl": url, "primaryLinkLabel": "Evil", "secondaryLinks": [{"url": url, "label": "Evil"}]}
+    body = epk(
+        platforms=links,
+        artist={"socialLinks": links},
+        agencyLink={"primaryLinkUrl": "https://ok.test", "primaryLinkLabel": "OK"},
+        charts={"edges": [{"node": {"name": "T", "spotifyLink": {"primaryLinkUrl": url}}}]},
+    )
+    assert body["platforms"] == []
+    assert "url" not in body["charts"][0]
+    with pytest.raises(ValidationError):  # a photo or agency link is required, so a bad one fails the kit
+        epk(photo={"primaryLinkUrl": url})
+    with pytest.raises(ValidationError):
+        epk(agencyLink={"primaryLinkUrl": url})

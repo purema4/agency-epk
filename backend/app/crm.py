@@ -95,6 +95,15 @@ def _text(value: Any) -> str | None:
     return None
 
 
+def _url(value: Any) -> str | None:
+    """A web link from the CRM, or None. Only http(s): the frontend puts these in href/src, where a
+    javascript: or data: URL typed into the CRM would run script on the host page."""
+    url = _text(value)
+    if url and urlparse(url).scheme.lower() in ("http", "https"):
+        return url
+    return None
+
+
 def _nodes(connection: Any) -> list[dict]:
     """Records of a one-to-many relation, in the order they're arranged in the CRM."""
     nodes = [edge["node"] for edge in (connection or {}).get("edges", [])]
@@ -118,7 +127,7 @@ def _links(field: Any) -> list[dict[str, str]]:
     return [
         {"name": _text(link.get("label")) or _platform_name(url), "url": url}
         for link in links
-        if (url := _text(link.get("url")))
+        if (url := _url(link.get("url")))
     ]
 
 
@@ -136,7 +145,7 @@ def map_crm_record(kit: dict[str, Any]) -> Epk:
     artist = kit.get("artist") or {}
     name = _text(kit.get("name")) or _text(artist.get("stageName")) or _text(artist.get("name"))
     agency = kit.get("agencyLink") or {}
-    agency_url = _text(agency.get("primaryLinkUrl"))
+    agency_url = _url(agency.get("primaryLinkUrl"))
 
     return Epk.model_validate(
         {
@@ -144,7 +153,7 @@ def map_crm_record(kit: dict[str, Any]) -> Epk:
             "label": _text(kit.get("label")) or "",
             "kicker": _text(kit.get("kicker")) or "",
             "photo": {
-                "src": _text((kit.get("photo") or {}).get("primaryLinkUrl")),
+                "src": _url((kit.get("photo") or {}).get("primaryLinkUrl")),
                 "alt": _text(kit.get("photoAlt")) or name,
             },
             "tags": [t for tag in kit.get("tags") or [] if (t := _text(tag))],
@@ -162,7 +171,7 @@ def map_crm_record(kit: dict[str, Any]) -> Epk:
                     "title": title,
                     "label": _text(c.get("recordLabel")) or "",
                     "position": _text(c.get("chartPosition")) or "",
-                    "url": _text((c.get("spotifyLink") or {}).get("primaryLinkUrl")),
+                    "url": _url((c.get("spotifyLink") or {}).get("primaryLinkUrl")),
                 }
                 for c in _nodes(kit.get("charts"))
                 if (title := _text(c.get("name")))
@@ -185,7 +194,7 @@ def map_roster(kits: list[dict[str, Any]]) -> Roster:
         artist = kit.get("artist") or {}
         slug = _text(kit.get("slug"))
         name = _text(kit.get("name")) or _text(artist.get("stageName")) or _text(artist.get("name"))
-        photo = _text((kit.get("photo") or {}).get("primaryLinkUrl"))
+        photo = _url((kit.get("photo") or {}).get("primaryLinkUrl"))
         if not (slug and name and photo):
             log.warning("Press kit %r left out of the roster: needs a slug, name and hero photo", slug or name)
             continue
@@ -262,7 +271,7 @@ class CrmClient:
         except ValidationError as exc:
             missing = ", ".join(".".join(map(str, e["loc"])) for e in exc.errors())
             log.error("Press kit %s is incomplete in the CRM: %s", artist_id, missing)
-            raise CrmError(502, f"The press kit is missing required fields: {missing}")
+            raise CrmError(502, "The press kit is incomplete in the CRM")
 
     async def get_roster(self) -> Roster:
         return map_roster(self._nodes(await self._query(ROSTER_QUERY, {}, "the roster"), "the roster"))

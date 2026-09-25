@@ -68,6 +68,16 @@ One GraphQL request per artist (`PRESS_KIT_QUERY` in `app/crm.py`) fetches the *
 `GET /artists` lists every published press kit in the order they're arranged in Twenty, as
 `{id: slug, name, photo}`. Kits without a slug, name or hero photo are left out (and logged).
 
-Slugs are matched exactly, so keep them lowercase (the API lowercases the requested id). An
-unpublished or missing kit is a 404; a published kit missing Hero Photo, Bio (Short), Booking Email
-or Agency Link answers 502 and logs which fields to fill in.
+Slugs are matched exactly, so keep them lowercase (the API lowercases the requested id). A kit
+that is unpublished, missing, or has no slug, name or hero photo is a 404: ids are checked against
+the cached roster before the CRM is asked, so made-up ids never reach Twenty. A published kit
+missing Bio (Short), Booking Email or Agency Link answers 502 and logs which fields to fill in.
+
+## Security
+
+- Read-only and public: GET only, CORS limited to localhost and the berlinrecords.info sites.
+- Only `http(s)` links leave the API (no `javascript:` or `data:` URLs from the CRM).
+- No `/docs` or `/openapi.json`; JSON responses carry CSP, `nosniff`, `DENY` framing and
+  `no-referrer` headers; no `Server` header.
+- The Twenty API key never leaves the server. Give it a read-only role in Twenty.
+- Dependencies are pinned; Dependabot proposes upgrades.

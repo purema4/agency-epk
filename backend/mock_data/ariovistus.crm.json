@@ -12,23 +12,19 @@
     "MELODIC"
   ],
   "platforms": {
-    "primaryLinkUrl": "#",
+    "primaryLinkUrl": "https://open.spotify.com/artist/56zZkc4hPcagnOYV3g3xSB",
     "primaryLinkLabel": "Spotify",
     "secondaryLinks": [
       {
-        "url": "#",
-        "label": "Beatport"
-      },
-      {
-        "url": "#",
+        "url": "https://soundcloud.com/ariovistus-dj",
         "label": "SoundCloud"
       },
       {
-        "url": "#",
+        "url": "https://www.youtube.com/@ariovistus3232",
         "label": "YouTube"
       },
       {
-        "url": "#",
+        "url": "https://www.instagram.com/ariovistus_ofc/",
         "label": "Instagram"
       }
     ]
