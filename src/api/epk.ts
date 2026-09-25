@@ -1,9 +1,11 @@
 import type { ChartEntry, Epk } from "../types";
+import { isArtistId } from "../utils/artistId";
 import { ApiError, getJson, type ApiConfig } from "./client";
 
 // Fetches an artist's press kit. If the CRM returns a different shape,
 // map its fields to `Epk` here so the components stay unchanged.
 export async function fetchEpk(api: ApiConfig, artistId: string, signal?: AbortSignal): Promise<Epk> {
+  if (!isArtistId(artistId)) throw new ApiError("Artist not found", 404);
   const data = await getJson<unknown>(api, `artists/${encodeURIComponent(artistId)}/epk`, signal);
   if (!isEpk(data)) throw new ApiError("The server returned an invalid press kit");
   return data;

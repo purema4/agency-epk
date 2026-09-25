@@ -37,7 +37,12 @@ export function apiUrl(baseUrl: string, path: string, documentBase: string = doc
 export async function getJson<T>(api: ApiConfig, path: string, signal?: AbortSignal): Promise<T> {
   let res: Response;
   try {
-    res = await api.fetch(apiUrl(api.baseUrl, path), { headers: { Accept: "application/json" }, signal });
+    // The API is public: never send the host site's cookies or HTTP auth along.
+    res = await api.fetch(apiUrl(api.baseUrl, path), {
+      headers: { Accept: "application/json" },
+      credentials: "omit",
+      signal,
+    });
   } catch (err) {
     if ((err as Error).name === "AbortError") throw err;
     throw new ApiError("Could not reach the server");
@@ -45,5 +50,11 @@ export async function getJson<T>(api: ApiConfig, path: string, signal?: AbortSig
   if (!res.ok) {
     throw new ApiError(res.status === 404 ? "Artist not found" : `Request failed (${res.status})`, res.status);
   }
-  return (await res.json()) as T;
+  try {
+    return (await res.json()) as T;
+  } catch (err) {
+    if ((err as Error).name === "AbortError") throw err;
+    // e.g. an HTML error page from a proxy: show a clean message, not the parser's.
+    throw new ApiError("The server returned an invalid response");
+  }
 }

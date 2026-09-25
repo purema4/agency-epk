@@ -41,16 +41,30 @@ describe("fetchEpk", () => {
     await expect(fetchEpk(api, "ariovistus")).resolves.toEqual(ariovistus);
   });
 
-  it("URL-encodes the artist id", async () => {
-    let requested = "";
+  it("never requests an id the backend wouldn't accept", async () => {
+    let requests = 0;
     server.use(
-      http.get(route, ({ request }) => {
-        requested = new URL(request.url).pathname;
+      http.all("*", () => {
+        requests++;
         return HttpResponse.json(ariovistus);
       })
     );
-    await fetchEpk(api, "dj a/b");
-    expect(requested).toBe("/api/artists/dj%20a%2Fb/epk");
+    for (const id of ["..", "dj a/b", "a%2F..", "x".repeat(65)]) {
+      await expect(fetchEpk(api, id)).rejects.toMatchObject({ message: "Artist not found", status: 404 });
+    }
+    expect(requests).toBe(0);
+  });
+
+  it("doesn't send cookies to the API", async () => {
+    let credentials = "";
+    server.use(
+      http.get(route, ({ request }) => {
+        credentials = request.credentials;
+        return HttpResponse.json(ariovistus);
+      })
+    );
+    await fetchEpk(api, "ariovistus");
+    expect(credentials).toBe("omit");
   });
 
   it("throws a 404 ApiError for an unknown artist", async () => {
@@ -67,6 +81,14 @@ describe("fetchEpk", () => {
   it("throws when the network fails", async () => {
     server.use(http.get(route, () => HttpResponse.error()));
     await expect(fetchEpk(api, "ariovistus")).rejects.toThrow("Could not reach the server");
+  });
+
+  it("gives a clean error when the response isn't JSON", async () => {
+    server.use(http.get(route, () => HttpResponse.text("<html>Bad gateway</html>")));
+    await expect(fetchEpk(api, "ariovistus")).rejects.toMatchObject({
+      name: "ApiError",
+      message: "The server returned an invalid response",
+    });
   });
 
   it("rejects a response that isn't a press kit", async () => {

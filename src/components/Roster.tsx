@@ -1,5 +1,6 @@
 import { useRoster } from "../hooks/useRoster";
 import type { RosterArtist } from "../types";
+import { safeUrl } from "../utils/safeUrl";
 import ErrorScreen from "./ErrorScreen";
 import LoadingScreen from "./LoadingScreen";
 
@@ -9,7 +10,7 @@ interface RosterProps {
 }
 
 export const artistHref = (template: string | null | undefined, id: string) =>
-  template ? template.replaceAll("{id}", encodeURIComponent(id)) : null;
+  (template && safeUrl(template.replaceAll("{id}", encodeURIComponent(id)))) || null;
 
 export default function Roster({ hrefTemplate }: RosterProps) {
   const { data, error, isPending, isFetching, refetch } = useRoster();

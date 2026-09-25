@@ -63,4 +63,8 @@ describe("artistHref", () => {
     expect(artistHref("/epk/{id}", "a b")).toBe("/epk/a%20b");
     expect(artistHref(null, "x")).toBeNull();
   });
+
+  it("gives no link for a template that isn't a web link", () => {
+    expect(artistHref("javascript:alert('{id}')", "x")).toBeNull();
+  });
 });

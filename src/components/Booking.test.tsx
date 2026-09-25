@@ -23,6 +23,13 @@ describe("Booking", () => {
     );
   });
 
+  it("doesn't link an address carrying mailto: parameters or an agency URL that isn't a web link", () => {
+    renderWithToast(<Booking {...props} email="a@b.com?bcc=x@evil.com" agencyUrl="javascript:alert(1)" />);
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    expect(screen.getByText("A@B.COM?BCC=X@EVIL.COM")).toBeInTheDocument();
+    expect(screen.getByText("BERLINRECORDS.INFO/AGENCY")).toBeInTheDocument();
+  });
+
   it("shows a contact name line when the CRM provides one", () => {
     renderWithToast(<Booking {...props} contact="BOOKING - JANE DOE" />);
     expect(screen.getByText("BOOKING - JANE DOE")).toBeInTheDocument();

@@ -42,6 +42,12 @@ describe("Hero", () => {
     expect(screen.getByRole("link", { name: "Beatport" })).toHaveAttribute("target", "_blank");
   });
 
+  it("leaves out platform links that aren't web links", () => {
+    render(<Hero {...props} platforms={[...props.platforms, { name: "Evil", url: "javascript:alert(1)" }]} />);
+    expect(screen.queryByText("Evil")).not.toBeInTheDocument();
+    expect(screen.getAllByRole("link")).toHaveLength(2);
+  });
+
   it("shifts the photo against the pointer and resets on leave", () => {
     const { container } = render(<Hero {...props} />);
     const hero = $(container, ".hero");

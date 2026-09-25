@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import type { BookingInfo } from "../types";
+import { isEmail, safeUrl } from "../utils/safeUrl";
 import { useToast } from "./Toast";
 
 export default function Booking({ contact, email, agencyUrl, agencyLabel }: BookingInfo) {
@@ -26,7 +27,8 @@ export default function Booking({ contact, email, agencyUrl, agencyLabel }: Book
     <footer className="booking">
       <div>
         {contact && <div>{contact}</div>}
-        <a ref={mailRef} href={`mailto:${email}`}>
+        {/* Without a valid address it stays plain text (still copyable). */}
+        <a ref={mailRef} href={isEmail(email) ? `mailto:${email}` : undefined}>
           {email.toUpperCase()}
         </a>
         <br />
@@ -34,7 +36,7 @@ export default function Booking({ contact, email, agencyUrl, agencyLabel }: Book
           Copy email
         </button>
       </div>
-      <a href={agencyUrl} target="_blank" rel="noopener noreferrer">
+      <a href={safeUrl(agencyUrl)} target="_blank" rel="noopener noreferrer">
         {agencyLabel}
       </a>
     </footer>
