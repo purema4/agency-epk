@@ -28,7 +28,7 @@ export default function Booking({ contact, email, agencyUrl, agencyLabel }: Book
       <div>
         {contact && <div>{contact}</div>}
         {/* Without a valid address it stays plain text (still copyable). */}
-        <a ref={mailRef} href={isEmail(email) ? `mailto:${email}` : undefined}>
+        <a ref={mailRef} className="booking-email" href={isEmail(email) ? `mailto:${email}` : undefined}>
           {email.toUpperCase()}
         </a>
         <br />

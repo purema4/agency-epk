@@ -126,6 +126,10 @@ h2{color:var(--orange-hi);font-weight:500;font-size:clamp(1.3rem,2.2vw,1.7rem);m
 
 .booking{transition:background .3s;background:var(--orange);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1rem 2rem;padding:1.4rem 2rem;margin-bottom:3rem;font-size:clamp(.95rem,1.6vw,1.3rem);font-weight:400;line-height:1.35}
 .booking a{text-decoration:none}
+/* One unbreakable word (~19em in caps): shrink it to the box's width on phones, break it only as a last resort. */
+.booking{container-type:inline-size}
+.booking-email{font-size:min(1em,5cqi);overflow-wrap:anywhere}
+@media (max-width:640px){.booking{padding:1.4rem 1.25rem}}
 .booking a:hover{text-decoration:underline}
 .copy{margin-top:.6rem;display:inline-flex;align-items:center;gap:.5em;background:#000;color:#fff;border:0;font:inherit;font-size:.78rem;font-weight:500;padding:.55em 1em;cursor:pointer}
 .copy{transition:background .2s,color .2s}
