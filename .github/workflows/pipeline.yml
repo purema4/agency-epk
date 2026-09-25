@@ -77,7 +77,7 @@ jobs:
             type=sha,format=short
       # PRs only build (no push) to prove the Dockerfile still works.
       - name: Build and push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: backend
           target: api
