@@ -34,6 +34,19 @@ def test_roster_follows_the_crm_order():
     assert [a.id for a in roster.artists] == ["a", "b", "c"]
 
 
+def test_roster_order_comes_before_the_crm_order():
+    roster = map_roster(
+        [
+            kit("unordered", 0),
+            kit("second", 1, rosterOrder=2),
+            kit("first", 2, rosterOrder=1),
+            kit("tie-b", 4, rosterOrder=3),
+            kit("tie-a", 3, rosterOrder=3),
+        ]
+    )
+    assert [a.id for a in roster.artists] == ["first", "second", "tie-a", "tie-b", "unordered"]
+
+
 def test_kits_that_cannot_make_a_tile_are_left_out():
     roster = map_roster(
         [

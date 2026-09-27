@@ -66,8 +66,9 @@ One GraphQL request per artist (`PRESS_KIT_QUERY` in `app/crm.py`) fetches the *
 | `charts` | Charts records: Track Title, Record Label, Chart Position |
 | `booking` | Booking Contact, Booking Email (primary), Agency Link (URL + label; label defaults to the bare URL) |
 
-`GET /artists` lists every published press kit in the order they're arranged in Twenty, as
-`{id: slug, name, photo}`. Kits without a slug, name or hero photo are left out (and logged).
+`GET /artists` lists every published press kit as `{id: slug, name, photo}`, sorted by **Roster
+Order** (1 is the first tile; kits with it empty come last, and ties keep the order they're
+arranged in Twenty). Kits without a slug, name or hero photo are left out (and logged).
 
 Slugs are matched exactly, so keep them lowercase (the API lowercases the requested id). A kit
 that is unpublished, missing, or has no slug, name or hero photo is a 404: ids are checked against

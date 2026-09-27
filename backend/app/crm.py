@@ -40,7 +40,7 @@ query PressKit($slug: String!) {
 }
 """
 
-# Every published press kit, for the <artist-roster> mosaic. Ordered by position afterwards.
+# Every published press kit, for the <artist-roster> mosaic. Ordered by Roster Order afterwards.
 ROSTER_QUERY = """
 query Roster {
   pressKits(filter: { isPublished: { eq: true } }, first: 100) {
@@ -50,6 +50,7 @@ query Roster {
         name
         photo { primaryLinkUrl }
         photoAlt
+        rosterOrder
         position
         artist { name stageName }
       }
@@ -198,11 +199,19 @@ def map_crm_record(kit: dict[str, Any]) -> Epk:
     )
 
 
+def _roster_rank(kit: dict[str, Any]) -> tuple[float, float]:
+    """Roster Order first (1 is the first tile, empty goes last), then the kits' arrangement in the
+    CRM to break ties."""
+    last = float("inf")
+    order, position = kit.get("rosterOrder"), kit.get("position")
+    return (order if order is not None else last, position if position is not None else last)
+
+
 def map_roster(kits: list[dict[str, Any]]) -> Roster:
     """Published press kits -> roster cards. Kits without a slug or photo can't make a tile and
     are left out (and logged) rather than failing the whole roster."""
     cards = []
-    for kit in sorted(kits, key=lambda n: n.get("position") if n.get("position") is not None else float("inf")):
+    for kit in sorted(kits, key=_roster_rank):
         artist = kit.get("artist") or {}
         slug = _text(kit.get("slug"))
         name = _text(kit.get("name")) or _text(artist.get("stageName")) or _text(artist.get("name"))
