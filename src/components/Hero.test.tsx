@@ -32,6 +32,15 @@ describe("Hero", () => {
     expect(screen.getByAltText("DJ behind the decks")).toHaveAttribute("src", "/hero.jpg");
     expect(screen.getByText("PEAK TECHNO")).toHaveClass("tag");
     expect(screen.getByText("DRIVEN")).toHaveClass("tag");
+    expect(document.querySelector(".flag")).not.toBeInTheDocument(); // no country, no flag
+  });
+
+  it("shows the country's flag next to the name", () => {
+    render(<Hero {...props} country="de" />);
+    const flag = screen.getByRole("img", { name: "Germany" });
+    expect(flag).toHaveAttribute("src", expect.stringMatching(/\/flags\/4x3\/de\.svg$/));
+    expect(flag).toHaveAttribute("title", "Germany");
+    expect(screen.getByRole("heading", { level: 1, name: "ARIOVISTUS" })).toBeInTheDocument();
   });
 
   it("renders the platform links", () => {

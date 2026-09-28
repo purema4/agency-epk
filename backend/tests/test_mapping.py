@@ -122,3 +122,8 @@ def test_accent_color_is_normalised(typed, sent):
 @pytest.mark.parametrize("typed", ["orange", "#12345", "#GGGGGG", "red;background:url(x)", "#c24a0c80"])
 def test_invalid_accent_colors_fall_back_to_the_default(typed):
     assert "accentColor" not in epk(accentColor=typed)
+
+
+@pytest.mark.parametrize(("typed", "sent"), [("CA", "CA"), ("de", "DE"), ("", None), (None, None), ("CAN", None), ("C1", None)])
+def test_country_comes_from_the_artist(typed, sent):
+    assert epk(artist={**ARIOVISTUS_CRM["artist"], "country": typed}).get("country") == sent

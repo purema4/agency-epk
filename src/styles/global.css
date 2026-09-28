@@ -54,7 +54,13 @@ a{color:inherit}
 .topbar span{transition:color .2s}
 .topbar span:hover{color:var(--orange-hi)}
 @keyframes rise{to{transform:none;opacity:1}}
-.name-clip{overflow:hidden;padding-top:.08em}
+.name-clip{overflow:hidden;padding-top:.08em;display:flex;align-items:flex-start;gap:clamp(.6rem,1.6vw,1.2rem)}
+/* Country flag (Flag.tsx): 4:3, thin edge so dark or white flags don't melt into the page. */
+.flag{display:inline-block;width:auto;aspect-ratio:4/3;object-fit:cover;border-radius:2px;box-shadow:0 0 0 1px rgba(244,244,242,.2)}
+/* The artist's country, top-aligned like a superscript; rises in after the last letter. */
+.name-flag{flex:none;height:clamp(1.3rem,3.8vw,2.9rem);margin-top:clamp(.2rem,.8vw,.6rem);transform:translateY(105%);opacity:0;animation:rise .9s cubic-bezier(.2,.8,.1,1) forwards;animation-delay:calc(var(--i)*55ms + 150ms)}
+/* Phones: long names fill the width, so the flag sits above the name instead. */
+@media (max-width:640px){.name-clip{flex-direction:column-reverse;gap:.35rem}.name-flag{margin-top:0}}
 .meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.2rem 2rem}
 .tags{display:flex;flex-wrap:wrap;gap:clamp(.6rem,2vw,1.4rem)}
 .tag{position:relative;overflow:hidden;border:3px solid var(--orange);padding:.85em 1.6em;min-width:10.5em;text-align:center;font-weight:500;font-size:clamp(.78rem,1.3vw,1rem);letter-spacing:.02em;background:rgba(0,0,0,.25);cursor:default;transition:transform .3s cubic-bezier(.2,.8,.1,1),border-color .2s;transform:translate(var(--tx,0),var(--ty,0))}
@@ -152,14 +158,14 @@ h2{color:var(--orange-hi);font-weight:500;font-size:clamp(1.3rem,2.2vw,1.7rem);m
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
-  .name span{transform:none;opacity:1}
+  .name span,.name-flag{transform:none;opacity:1}
   .rule{transform:none}
 }
 @media print{
   .toast,.bio-more,.copy,.cursor,.progress,.tilt-btn{display:none!important}
   body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .hero{min-height:auto;height:560px}
-  .name span{transform:none;opacity:1;animation:none}
+  .name span,.name-flag{transform:none;opacity:1;animation:none}
   .rule{transform:none}
 }
 

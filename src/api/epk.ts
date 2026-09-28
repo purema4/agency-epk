@@ -40,6 +40,7 @@ export function isEpk(v: unknown): v is Epk {
     isObj(booking) &&
     (booking.contact === undefined || isStr(booking.contact)) &&
     hasStrings("email", "agencyUrl", "agencyLabel")(booking) &&
-    optStr(v.accentColor)
+    optStr(v.accentColor) &&
+    optStr(v.country)
   );
 }

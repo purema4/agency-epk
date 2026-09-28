@@ -12,7 +12,13 @@ const isObj = (v: unknown): v is Record<string, unknown> => typeof v === "object
 const isStr = (v: unknown): v is string => typeof v === "string";
 
 const isRosterArtist = (v: unknown): v is RosterArtist =>
-  isObj(v) && isStr(v.id) && isStr(v.name) && isObj(v.photo) && isStr(v.photo.src) && isStr(v.photo.alt);
+  isObj(v) &&
+  isStr(v.id) &&
+  isStr(v.name) &&
+  (v.country === undefined || isStr(v.country)) &&
+  isObj(v.photo) &&
+  isStr(v.photo.src) &&
+  isStr(v.photo.alt);
 
 export const isRoster = (v: unknown): v is Roster =>
   isObj(v) && Array.isArray(v.artists) && v.artists.every(isRosterArtist);

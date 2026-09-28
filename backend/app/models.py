@@ -45,6 +45,7 @@ class BookingInfo(CamelModel):
 class RosterArtist(CamelModel):
     id: str  # the press kit slug, i.e. the artist-id of <artist-epk>
     name: str
+    country: str | None = None  # ISO 3166 code, e.g. "CA"; the tile shows its flag
     photo: Photo
 
 
@@ -54,6 +55,7 @@ class Roster(CamelModel):
 
 class Epk(CamelModel):
     name: str
+    country: str | None = None  # ISO 3166 code, e.g. "CA"; shown as a flag next to the name
     label: str
     kicker: str
     photo: Photo

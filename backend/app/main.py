@@ -69,8 +69,8 @@ def create_app(settings: Settings | None = None, crm_transport: httpx.AsyncBaseT
         except CrmError as exc:
             raise HTTPException(exc.status, exc.message)
 
-    # Every published press kit as {id, name, photo}, for the <artist-roster> mosaic.
-    @app.get("/artists", response_model=Roster, response_model_by_alias=True)
+    # Every published press kit as {id, name, country, photo}, for the <artist-roster> mosaic.
+    @app.get("/artists", response_model=Roster, response_model_by_alias=True, response_model_exclude_none=True)
     async def get_roster(request: Request, response: Response) -> Roster:
         roster = await load_roster(request)
         response.headers["Cache-Control"] = f"public, max-age={int(settings.cache_ttl_seconds)}"

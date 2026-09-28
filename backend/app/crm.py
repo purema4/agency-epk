@@ -31,7 +31,7 @@ query PressKit($slug: String!) {
         bookingContact
         bookingEmail { primaryEmail }
         agencyLink { primaryLinkUrl primaryLinkLabel }
-        artist { name stageName socialLinks { primaryLinkUrl primaryLinkLabel secondaryLinks } }
+        artist { name stageName country socialLinks { primaryLinkUrl primaryLinkLabel secondaryLinks } }
         stats { edges { node { name value position } } }
         charts { edges { node { name recordLabel chartPosition spotifyLink { primaryLinkUrl } position } } }
       }
@@ -52,7 +52,7 @@ query Roster {
         photoAlt
         rosterOrder
         position
-        artist { name stageName }
+        artist { name stageName country }
       }
     }
   }
@@ -116,6 +116,12 @@ def _hex_color(value: Any) -> str | None:
     return None
 
 
+def _country(value: Any) -> str | None:
+    """The artist's Country select (an ISO 3166 code like "CA"), or None."""
+    code = (_text(value) or "").upper()
+    return code if len(code) == 2 and code.isascii() and code.isalpha() else None
+
+
 def _nodes(connection: Any) -> list[dict]:
     """Records of a one-to-many relation, in the order they're arranged in the CRM."""
     nodes = [edge["node"] for edge in (connection or {}).get("edges", [])]
@@ -162,6 +168,7 @@ def map_crm_record(kit: dict[str, Any]) -> Epk:
     return Epk.model_validate(
         {
             "name": name,
+            "country": _country(artist.get("country")),
             "label": _text(kit.get("label")) or "",
             "kicker": _text(kit.get("kicker")) or "",
             "accentColor": _hex_color(kit.get("accentColor")),
@@ -219,7 +226,14 @@ def map_roster(kits: list[dict[str, Any]]) -> Roster:
         if not (slug and name and photo):
             log.warning("Press kit %r left out of the roster: needs a slug, name and hero photo", slug or name)
             continue
-        cards.append(RosterArtist(id=slug.lower(), name=name, photo={"src": photo, "alt": _text(kit.get("photoAlt")) or name}))
+        cards.append(
+            RosterArtist(
+                id=slug.lower(),
+                name=name,
+                country=_country(artist.get("country")),
+                photo={"src": photo, "alt": _text(kit.get("photoAlt")) or name},
+            )
+        )
     return Roster(artists=cards)
 
 

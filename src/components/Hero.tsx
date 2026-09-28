@@ -6,13 +6,13 @@ import AnimatedName from "./AnimatedName";
 import PlatformLinks from "./PlatformLinks";
 import Tag from "./Tag";
 
-type HeroProps = Pick<Epk, "name" | "label" | "kicker" | "photo" | "tags" | "platforms">;
+type HeroProps = Pick<Epk, "name" | "country" | "label" | "kicker" | "photo" | "tags" | "platforms">;
 
 // Max photo shift in px: pointer on desktop, gyroscope on touch devices.
 const POINTER_SHIFT = { x: 18, y: 12 };
 const TILT_SHIFT = { x: 12, y: 10 };
 
-export default function Hero({ name, label, kicker, photo, tags, platforms }: HeroProps) {
+export default function Hero({ name, country, label, kicker, photo, tags, platforms }: HeroProps) {
   const reduce = useReducedMotion();
   const touch = useMediaQuery("(pointer: coarse)");
   const imgRef = useRef<HTMLImageElement>(null);
@@ -56,7 +56,7 @@ export default function Hero({ name, label, kicker, photo, tags, platforms }: He
       </div>
 
       <div className="wrap hero-bottom">
-        <AnimatedName text={name} />
+        <AnimatedName text={name} country={country} />
         <div className="meta">
           <div className="tags">
             {tags.map((t) => (

@@ -11,7 +11,7 @@ export function epkResponse(artistId: string): Response {
 
 /** Every sample artist as a roster tile, like GET /artists on the backend. */
 export function rosterResponse(): Response {
-  const roster: Roster = { artists: Object.entries(artists).map(([id, { name, photo }]) => ({ id, name, photo })) };
+  const roster: Roster = { artists: Object.entries(artists).map(([id, { name, country, photo }]) => ({ id, name, country, photo })) };
   return Response.json(roster);
 }
 

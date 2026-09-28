@@ -18,7 +18,7 @@ const renderRoster = (hrefTemplate?: string) =>
   );
 
 beforeEach(() => {
-  artists.nova = { ...ariovistus, name: "NOVA", photo: { src: "/nova.jpg", alt: "Nova on stage" } };
+  artists.nova = { ...ariovistus, name: "NOVA", country: "CA", photo: { src: "/nova.jpg", alt: "Nova on stage" } };
 });
 afterEach(() => {
   delete artists.nova;
@@ -31,14 +31,16 @@ describe("Roster", () => {
 
     const list = await screen.findByRole("list", { name: "Artists" });
     const tiles = within(list).getAllByRole("listitem");
-    expect(tiles.map((t) => t.textContent)).toEqual(["ARIOVISTUS", "NOVA"]);
+    expect(tiles.map((t) => t.textContent?.trim())).toEqual(["ARIOVISTUS", "NOVA"]);
     expect(within(tiles[1]).getByRole("img", { name: "Nova on stage" })).toHaveAttribute("src", "/nova.jpg");
+    expect(within(tiles[1]).getByRole("img", { name: "Canada" })).toHaveAttribute("src", expect.stringMatching(/\/ca\.svg$/));
+    expect(within(tiles[0]).queryByRole("img", { name: "Canada" })).not.toBeInTheDocument(); // no country, no flag
     expect(screen.queryByRole("link")).not.toBeInTheDocument(); // no href-template, no links
   });
 
   it("links each tile through href-template, in the whole window", async () => {
     renderRoster("https://berlinrecords.info/epk?artist={id}");
-    const link = await screen.findByRole("link", { name: "NOVA" });
+    const link = await screen.findByRole("link", { name: "NOVA Canada" });
     expect(link).toHaveAttribute("href", "https://berlinrecords.info/epk?artist=nova");
     expect(link).toHaveAttribute("target", "_top");
   });

@@ -24,6 +24,8 @@ describe("isRoster", () => {
     ["a bare array", [card], false],
     ["a card without photo", { artists: [{ id: "x", name: "X" }] }, false],
     ["a numeric id", { artists: [{ ...card, id: 1 }] }, false],
+    ["a card with a country", { artists: [{ ...card, country: "CA" }] }, true],
+    ["a numeric country", { artists: [{ ...card, country: 1 }] }, false],
   ])("%s -> %s", (_, value, ok) => {
     expect(isRoster(value)).toBe(ok);
   });

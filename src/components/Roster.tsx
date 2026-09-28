@@ -2,6 +2,7 @@ import { useRoster } from "../hooks/useRoster";
 import type { RosterArtist } from "../types";
 import { safeUrl } from "../utils/safeUrl";
 import ErrorScreen from "./ErrorScreen";
+import Flag from "./Flag";
 import LoadingScreen from "./LoadingScreen";
 
 interface RosterProps {
@@ -42,11 +43,18 @@ export default function Roster({ hrefTemplate }: RosterProps) {
 }
 
 function RosterTile({ artist, href }: { artist: RosterArtist; href: string | null }) {
+  // The flag stays on the line of the last word instead of wrapping onto a line of its own.
+  const cut = artist.name.lastIndexOf(" ") + 1;
   // On a link, the name alone names the tile; the photo description would only repeat it.
   const body = (
     <>
       <img src={artist.photo.src} alt={href ? "" : artist.photo.alt} loading="lazy" decoding="async" />
-      <span className="tile-name">{artist.name}</span>
+      <span className="tile-name">
+        {artist.name.slice(0, cut)}
+        <span className="tile-last">
+          {artist.name.slice(cut)} <Flag country={artist.country} className="tile-flag" />
+        </span>
+      </span>
     </>
   );
   // _top: inside GoDaddy's iframe, open the artist page in the whole window, not the frame.

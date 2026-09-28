@@ -12,6 +12,7 @@ export default function EpkPage({ epk }: { epk: Epk }) {
     <>
       <Hero
         name={epk.name}
+        country={epk.country}
         label={epk.label}
         kicker={epk.kicker}
         photo={epk.photo}

@@ -36,6 +36,8 @@ export interface BookingInfo {
 
 export interface Epk {
   name: string;
+  /** ISO 3166 country code from the CRM ("CA"); shown as a flag next to the name. */
+  country?: string;
   label: string;
   kicker: string;
   photo: Photo;
@@ -54,6 +56,7 @@ export interface Epk {
 export interface RosterArtist {
   id: string;
   name: string;
+  country?: string;
   photo: Photo;
 }
 

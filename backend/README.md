@@ -6,7 +6,7 @@ key (kept server-side), maps the record to the press kit shape, caches it briefl
 `https://agency-epk.purema4.workers.dev`.
 
 ```
-GET /artists                   -> {"artists": [{id, name, photo}]} for <artist-roster>
+GET /artists                   -> {"artists": [{id, name, country?, photo}]} for <artist-roster>
 GET /artists/{artist_id}/epk   -> press kit JSON (same shape as src/types.ts)
 GET /health
 ```
@@ -56,6 +56,7 @@ One GraphQL request per artist (`PRESS_KIT_QUERY` in `app/crm.py`) fetches the *
 | EPK JSON | Twenty (Press Kit) |
 |---|---|
 | `name` | Display Name, else the artist's Stage Name / Name |
+| `country` | The artist's Country (ISO code like `CA`); omitted when empty, and no flag is shown |
 | `label`, `kicker`, `lede` | Label, Kicker, Lede |
 | `accentColor` | Accent Color as `#rrggbb` (`#RGB` and a missing `#` are accepted); omitted when empty or not a hex color, and the EPK keeps its orange |
 | `photo.src` / `photo.alt` | Hero Photo (a public URL) / Hero Photo Alt Text, else the name |
@@ -66,7 +67,7 @@ One GraphQL request per artist (`PRESS_KIT_QUERY` in `app/crm.py`) fetches the *
 | `charts` | Charts records: Track Title, Record Label, Chart Position |
 | `booking` | Booking Contact, Booking Email (primary), Agency Link (URL + label; label defaults to the bare URL) |
 
-`GET /artists` lists every published press kit as `{id: slug, name, photo}`, sorted by **Roster
+`GET /artists` lists every published press kit as `{id: slug, name, country, photo}`, sorted by **Roster
 Order** (1 is the first tile; kits with it empty come last, and ties keep the order they're
 arranged in Twenty). Kits without a slug, name or hero photo are left out (and logged).
 

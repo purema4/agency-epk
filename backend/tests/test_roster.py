@@ -80,3 +80,11 @@ def test_crm_failures_become_gateway_errors(client, crm):
     res = client.get("/artists")
     assert res.status_code == 502
     assert res.json()["detail"] == "The CRM returned an error (500)"
+
+
+def test_tiles_carry_the_artist_country():
+    [with_country, without] = map_roster(
+        [kit("a", 0, artist={"stageName": "A", "country": "CA"}), kit("b", 1, artist={"stageName": "B", "country": None})]
+    ).artists
+    assert with_country.country == "CA"
+    assert without.country is None
