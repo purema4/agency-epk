@@ -15,13 +15,11 @@
 .tile::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(5,5,6,.88),rgba(5,5,6,0) 55%);pointer-events:none}
 .tile-name{position:absolute;left:1rem;right:1rem;bottom:.95rem;z-index:2;font-family:"Anton","Impact","Arial Narrow Bold",sans-serif;font-weight:400;font-size:clamp(1.5rem,2.4vw,2.3rem);line-height:.95;letter-spacing:.01em;text-transform:uppercase;overflow-wrap:anywhere}
 .tile-last{white-space:nowrap}
-.tile-flag{height:.42em;margin-left:.1em;vertical-align:.95em}
+.tile-flag{height:.72em;margin-left:.08em;vertical-align:baseline} /* Anton's cap height, sitting on the baseline */
 .tile-name::after{content:"";display:block;height:4px;width:2.2rem;margin-top:.55rem;background:var(--orange);transition:width .4s cubic-bezier(.2,.8,.1,1),background .3s}
 
 .tile:hover>img,.tile:focus-visible>img{transform:scale(1.08);filter:none}
-.tile:hover .tile-name::after,.tile:focus-visible .tile-last{white-space:nowrap}
-.tile-flag{height:.42em;margin-left:.1em;vertical-align:.95em}
-.tile-name::after{width:100%;background:var(--orange-hi)}
+.tile:hover .tile-name::after,.tile:focus-visible .tile-name::after{width:100%;background:var(--orange-hi)}
 a.tile{cursor:pointer}
 a.tile:focus-visible{outline:2px solid var(--orange-hi);outline-offset:-2px}
 /* No hover on touch screens: show the photos in full colour. */
